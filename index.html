@@ -225,6 +225,7 @@ html.light .toggle-thumb{left:19px;background:#fff}
   <a class="sb-link" onclick="go('heranca')"><span class="icon">🔬</span>Padrões de Herança</a>
   <a class="sb-link" onclick="go('molecular')"><span class="icon">🧪</span>Genética Molecular</a>
   <a class="sb-link" onclick="go('cromossomica')"><span class="icon">🔴</span>Mutação Cromossômica</a>
+  <a class="sb-link" onclick="go('doencas')"><span class="icon">🏥</span>Doenças Genéticas</a>
 
   <div class="sb-section">Embriologia (1,5 pt)</div>
   <a class="sb-link" onclick="go('reprodutivo')"><span class="icon">⚕️</span>Sistema Reprodutivo</a>
@@ -251,7 +252,7 @@ html.light .toggle-thumb{left:19px;background:#fff}
 <div class="page active" id="page-dashboard">
   <div class="page-header">
     <p class="page-tag">// início</p>
-    <h1 class="page-title">Olá, Barbara! 👋</h1>
+    <h1 class="page-title">Olá, Gabriel! 👋</h1>
     <div class="page-line"></div>
     <p class="page-desc">Sua A2 vale <strong style="color:var(--accent2)">3,0 pontos</strong> — 1,5 de Genética e 1,5 de Embriologia. Use este guia para dominar cada tópico com teoria, exercícios e flashcards.</p>
   </div>
@@ -268,6 +269,7 @@ html.light .toggle-thumb{left:19px;background:#fff}
         <li>Padrões de Herança</li>
         <li>Genética Molecular e Mutação</li>
         <li>Mutação Cromossômica</li>
+        <li>Doenças Genéticas Dominantes e Recessivas</li>
       </ul>
     </div>
     <div class="card" style="border-left:3px solid var(--teal)">
@@ -308,6 +310,7 @@ html.light .toggle-thumb{left:19px;background:#fff}
       <li><input type="checkbox" onchange="updateProgress()"> Estudei Padrões de Herança</li>
       <li><input type="checkbox" onchange="updateProgress()"> Estudei Genética Molecular</li>
       <li><input type="checkbox" onchange="updateProgress()"> Estudei Mutação Cromossômica</li>
+      <li><input type="checkbox" onchange="updateProgress()"> Estudei Doenças Genéticas</li>
       <li><input type="checkbox" onchange="updateProgress()"> Estudei Sistema Reprodutivo</li>
       <li><input type="checkbox" onchange="updateProgress()"> Estudei Gametogênese</li>
       <li><input type="checkbox" onchange="updateProgress()"> Estudei Fertilização</li>
@@ -858,6 +861,228 @@ html.light .toggle-thumb{left:19px;background:#fff}
   </div>
 </div>
 
+<!-- ═══════════════════════ DOENÇAS GENÉTICAS ═══════════════════════ -->
+<div class="page" id="page-doencas">
+  <div class="page-header">
+    <p class="page-tag">// genética · doenças</p>
+    <h1 class="page-title">🏥 Doenças Genéticas</h1>
+    <div class="page-line"></div>
+    <p class="page-desc">Doenças causadas por mutações em um único gene — classificadas pelo padrão de herança autossômica dominante ou recessiva.</p>
+  </div>
+
+  <!-- ── CONCEITOS BASE ── -->
+  <div class="card">
+    <h3>📐 Antes de tudo — Conceitos-chave</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Conceito</th><th>Definição</th></tr>
+      <tr><td><strong>Penetrância</strong></td><td>Proporção de indivíduos com o genótipo que EXIBEM o fenótipo. Penetrância incompleta = nem todos que têm o alelo dominante desenvolvem a doença (ex: BRCA1)</td></tr>
+      <tr><td><strong>Expressividade</strong></td><td>Intensidade do fenótipo em indivíduos que expressam a doença. Expressividade variável = mesma mutação, gravidades diferentes (ex: NF1)</td></tr>
+      <tr><td><strong>Portador</strong></td><td>Heterozigoto (Aa) saudável que carrega um alelo recessivo mutante. Só aparece em doenças recessivas.</td></tr>
+      <tr><td><strong>De novo</strong></td><td>Mutação nova, não herdada dos pais. Ex: 80% dos casos de acondroplasia são mutações de novo.</td></tr>
+      <tr><td><strong>Heterogeneidade alélica</strong></td><td>Diferentes mutações no mesmo gene causam a mesma doença. Ex: fibrose cística tem >2.000 mutações no gene CFTR.</td></tr>
+    </table></div>
+  </div>
+
+  <!-- ── DOMINANTES ── -->
+  <div class="card" style="border-left:3px solid var(--accent)">
+    <h3>🔺 Herança Autossômica Dominante — Regras Gerais</h3>
+    <div class="box info">
+      <strong>Definição:</strong> basta <strong>1 alelo mutante</strong> (heterozigoto Aa) para causar a doença. O alelo mutante é dominante sobre o normal.
+    </div>
+    <ul style="margin:.75rem 0 0 1rem">
+      <li>Pai ou mãe afetado → <strong>50% de chance</strong> de transmitir para cada filho</li>
+      <li>A doença aparece em <strong>todas as gerações</strong> (herança vertical) — não "pula" gerações</li>
+      <li>Homens e mulheres igualmente afetados (autossômica)</li>
+      <li>Pai afetado PODE transmitir para filhos homens (diferente da ligada ao X)</li>
+      <li>Indivíduos não afetados geralmente <strong>não transmitem</strong> a doença</li>
+      <li>Homozigotos dominantes (AA) geralmente são mais graves ou letais</li>
+    </ul>
+    <div class="punnett" style="margin-top:.75rem">
+      <div class="hdr"></div><div class="hdr">A</div><div class="hdr">a</div>
+      <div class="hdr">a</div><div class="cell" style="color:#f87171">Aa ✗</div><div class="cell" style="color:#6ee7b7">aa ✓</div>
+      <div class="hdr">a</div><div class="cell" style="color:#f87171">Aa ✗</div><div class="cell" style="color:#6ee7b7">aa ✓</div>
+    </div>
+    <p style="font-size:.8rem;color:var(--muted);margin-top:.3rem">Afetado (Aa) × Normal (aa) → 50% afetados (✗) : 50% normais (✓)</p>
+  </div>
+
+  <div class="card">
+    <h3>🔬 Principais Doenças Autossômicas Dominantes</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Doença</th><th>Gene / Local</th><th>Mecanismo</th><th>Características clínicas</th></tr>
+      <tr>
+        <td><strong>Doença de Huntington</strong></td>
+        <td>HTT / 4p16</td>
+        <td>Expansão de repetição CAG (&gt;36 repetições) → proteína huntingtina tóxica</td>
+        <td>Degeneração neurológica progressiva. Início tardio (30–50 anos). Coreia, demência, transtornos psiquiátricos. Sem cura.</td>
+      </tr>
+      <tr>
+        <td><strong>Acondroplasia</strong></td>
+        <td>FGFR3 / 4p16</td>
+        <td>Mutação de ganho de função no receptor FGFR3 → inibe crescimento das cartilagens</td>
+        <td>Forma mais comum de nanismo. Membros curtos, tronco normal, macrocefalia. 80% são mutações de novo.</td>
+      </tr>
+      <tr>
+        <td><strong>Síndrome de Marfan</strong></td>
+        <td>FBN1 / 15q21</td>
+        <td>Mutação na fibrilina-1 → tecido conjuntivo frágil</td>
+        <td>Estatura alta, extremidades longas (dolicostenomelia), dedos aracnodáctilos, luxação do cristalino, dilatação da aorta (risco de ruptura).</td>
+      </tr>
+      <tr>
+        <td><strong>Neurofibromatose tipo 1 (NF1)</strong></td>
+        <td>NF1 / 17q11</td>
+        <td>Perda de função da neurofibromina (supressor tumoral)</td>
+        <td>Manchas café-com-leite (&gt;6, &gt;5mm pré-puberal), neurofibromas cutâneos, nódulos de Lisch na íris. Frequente (1:3.000). Expressividade variável.</td>
+      </tr>
+      <tr>
+        <td><strong>Hipercolesterolemia Familiar</strong></td>
+        <td>LDLR / 19p13</td>
+        <td>Deficiência de receptores LDL → acúmulo de LDL no sangue</td>
+        <td>LDL muito elevado, xantomas tendinosos, xantelasmas, doença cardiovascular precoce. Homozigoto grave (LDL &gt;600 mg/dL).</td>
+      </tr>
+      <tr>
+        <td><strong>Polidactilia</strong></td>
+        <td>Vários genes</td>
+        <td>Desenvolvimento anormal dos dígitos</td>
+        <td>Dígito(s) extra(s) nas mãos ou pés. Penetrância variável — mesmo na mesma família pode não aparecer.</td>
+      </tr>
+      <tr>
+        <td><strong>Retinoblastoma (Rb)</strong></td>
+        <td>RB1 / 13q14</td>
+        <td>Perda de ambos os alelos (supressor tumoral) — 1ª mutação herdada, 2ª somática</td>
+        <td>Tumor ocular maligno na infância. Forma hereditária: bilateral, início precoce. Leucocoria (reflexo branco na pupila). Modelo "dois hits" de Knudson.</td>
+      </tr>
+    </table></div>
+    <div class="box warn">⚠️ <strong>Huntington e antecipação:</strong> quanto mais repetições CAG, mais precoce e grave é o início. Pai transmite → filhos podem ter início mais cedo (fenômeno de antecipação).</div>
+  </div>
+
+  <!-- ── RECESSIVAS ── -->
+  <div class="card" style="border-left:3px solid var(--teal)">
+    <h3>🔻 Herança Autossômica Recessiva — Regras Gerais</h3>
+    <div class="box info">
+      <strong>Definição:</strong> necessita <strong>2 alelos mutantes</strong> (homozigoto aa) para causar a doença. Heterozigotos (Aa) são portadores saudáveis.
+    </div>
+    <ul style="margin:.75rem 0 0 1rem">
+      <li>Pais portadores (Aa × Aa) → <strong>25% doente, 50% portador, 25% normal</strong></li>
+      <li>A doença pode <strong>"pular" gerações</strong> (portadores assintomáticos)</li>
+      <li>Homens e mulheres igualmente afetados (autossômica)</li>
+      <li>Mais frequente em <strong>consanguinidade</strong> (parentes que se casam)</li>
+      <li>Afetados podem ter pais completamente saudáveis</li>
+    </ul>
+    <div class="punnett" style="margin-top:.75rem">
+      <div class="hdr"></div><div class="hdr">A</div><div class="hdr">a</div>
+      <div class="hdr">A</div><div class="cell" style="color:#6ee7b7">AA ✓</div><div class="cell" style="color:#fde68a">Aa ~</div>
+      <div class="hdr">a</div><div class="cell" style="color:#fde68a">Aa ~</div><div class="cell" style="color:#f87171">aa ✗</div>
+    </div>
+    <p style="font-size:.8rem;color:var(--muted);margin-top:.3rem">Portador × Portador (Aa × Aa) → 25% normal ✓, 50% portador ~, 25% doente ✗</p>
+  </div>
+
+  <div class="card">
+    <h3>🔬 Principais Doenças Autossômicas Recessivas</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Doença</th><th>Gene / Local</th><th>Mecanismo</th><th>Características clínicas</th></tr>
+      <tr>
+        <td><strong>Fibrose Cística (FC)</strong></td>
+        <td>CFTR / 7q31</td>
+        <td>Mutação mais comum: ΔF508 (deleção de fenilalanina na posição 508) → canal de Cl⁻ defeituoso → muco espesso</td>
+        <td>Doença genética letal mais comum em caucasianos. Obstrução pulmonar crônica, insuficiência pancreática, infertilidade masculina (ausência de ducto deferente). Teste do pezinho.</td>
+      </tr>
+      <tr>
+        <td><strong>Anemia Falciforme</strong></td>
+        <td>HBB / 11p15</td>
+        <td>Mutação missense Glu→Val (p.Glu6Val) na cadeia β da hemoglobina → HbS polimeriza → hemácia em foice</td>
+        <td>Mais comum em afrodescendentes. Crises vaso-oclusivas dolorosas, anemia hemolítica, esplenomegalia, infecções recorrentes. Heterozigoto (traço falciforme) tem proteção parcial à malária.</td>
+      </tr>
+      <tr>
+        <td><strong>Fenilcetonúria (PKU)</strong></td>
+        <td>PAH / 12q23</td>
+        <td>Deficiência de fenilalanina hidroxilase → acúmulo de fenilalanina → neurotóxica</td>
+        <td>DI grave se não tratada. Hipopigmentação, eczema, odor de mofo. Tratamento: dieta restrita em fenilalanina desde o nascimento. Detectada pelo teste do pezinho.</td>
+      </tr>
+      <tr>
+        <td><strong>Doença de Tay-Sachs</strong></td>
+        <td>HEXA / 15q23</td>
+        <td>Deficiência de hexosaminidase A → acúmulo de gangliosídeo GM2 nos neurônios</td>
+        <td>Comum em judeus Ashkenazi. Regressão neurológica progressiva a partir dos 6 meses. Mancha vermelho-cereja na mácula. Fatal na infância (2–5 anos).</td>
+      </tr>
+      <tr>
+        <td><strong>Galactosemia</strong></td>
+        <td>GALT / 9p13</td>
+        <td>Deficiência de galactose-1-fosfato uridiltransferase → acúmulo de galactose-1-P tóxico</td>
+        <td>Icterícia neonatal, hepatomegalia, catarata, DI. Tratamento: dieta sem lactose (e galactose) desde o nascimento. Detectada pelo teste do pezinho.</td>
+      </tr>
+      <tr>
+        <td><strong>Albinismo Oculocutâneo</strong></td>
+        <td>TYR e outros / 11q14</td>
+        <td>Deficiência de tirosinase → sem produção de melanina</td>
+        <td>Pele, cabelos e olhos sem pigmentação. Fotossensibilidade, nistagmo, acuidade visual reduzida. Sem DI. Maior risco de câncer de pele.</td>
+      </tr>
+      <tr>
+        <td><strong>Atrofia Muscular Espinhal (AME)</strong></td>
+        <td>SMN1 / 5q13</td>
+        <td>Deleção ou mutação do gene SMN1 → deficiência de proteína SMN → degeneração de neurônios motores anteriores</td>
+        <td>Fraqueza muscular progressiva, hipotonia. AME tipo I (Werdnig-Hoffmann): grave, morte antes dos 2 anos. Tratamento: terapia gênica (Zolgensma) ou oligonucleotídeos antissenso (Spinraza).</td>
+      </tr>
+    </table></div>
+    <div class="box success">💡 <strong>Macete FC:</strong> Fibrose Cística = gene CFTR = <strong>C</strong>F<strong>T</strong>R = <strong>C</strong>hannel (canal de cloro). Mutação mais comum = ΔF508 (delta = deleção; F = fenilalanina; 508 = posição).</div>
+  </div>
+
+  <!-- ── LIGADA AO X ── -->
+  <div class="card" style="border-left:3px solid var(--pink)">
+    <h3>🔗 Herança Recessiva Ligada ao X — Resumo Clínico</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Doença</th><th>Gene</th><th>Proteína afetada</th><th>Características</th></tr>
+      <tr>
+        <td><strong>Hemofilia A</strong></td>
+        <td>F8 / Xq28</td>
+        <td>Fator VIII da coagulação</td>
+        <td>Sangramento excessivo após trauma/cirurgia. Hemartroses (sangramento articular). Tratamento: reposição do fator VIII.</td>
+      </tr>
+      <tr>
+        <td><strong>Hemofilia B</strong></td>
+        <td>F9 / Xq27</td>
+        <td>Fator IX da coagulação</td>
+        <td>Semelhante à Hemofilia A, porém menos frequente. Tratamento: reposição do fator IX.</td>
+      </tr>
+      <tr>
+        <td><strong>Distrofia Muscular de Duchenne (DMD)</strong></td>
+        <td>DMD / Xp21</td>
+        <td>Distrofina (proteína estrutural do músculo)</td>
+        <td>Mais comum em meninos. Fraqueza muscular progressiva desde os 3-5 anos. Perda da marcha ~12 anos. Pseudohipertrofia de panturrilhas. CPK muito elevado. Fatal pela 3ª década.</td>
+      </tr>
+      <tr>
+        <td><strong>Daltonismo</strong></td>
+        <td>OPN1LW/OPN1MW / Xq28</td>
+        <td>Opsinas do cone (verde/vermelho)</td>
+        <td>Dificuldade em distinguir verde e vermelho. Forma mais comum: 8% dos homens, 0,5% das mulheres. Não causa incapacidade grave.</td>
+      </tr>
+    </table></div>
+    <div class="box danger">⚠️ <strong>Regra das ligadas ao X recessivas:</strong> mãe portadora (X^A X^a) × pai normal (X^A Y) → 50% das filhas são portadoras + 50% dos filhos são afetados.</div>
+  </div>
+
+  <!-- ── COMPARATIVO ── -->
+  <div class="card">
+    <h3>📊 Comparativo Final — Dominante vs Recessiva vs Ligada ao X</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Característica</th><th>Autossômica Dominante</th><th>Autossômica Recessiva</th><th>Recessiva Ligada ao X</th></tr>
+      <tr><td>Alelos necessários</td><td>1 (heterozigoto)</td><td>2 (homozigoto)</td><td>1 (em homens XY)</td></tr>
+      <tr><td>Portadores saudáveis</td><td>Não</td><td>Sim (Aa)</td><td>Sim (mulheres X^A X^a)</td></tr>
+      <tr><td>"Pula" gerações</td><td>Não (exceto penet. incompleta)</td><td>Sim</td><td>Sim</td></tr>
+      <tr><td>Proporção afetados (pais Aa × Aa)</td><td>—</td><td>25%</td><td>—</td></tr>
+      <tr><td>Proporção afetados (Aa × aa)</td><td>50%</td><td>—</td><td>—</td></tr>
+      <tr><td>Sexo mais afetado</td><td>Igual</td><td>Igual</td><td>Masculino</td></tr>
+      <tr><td>Pai afetado → filho afetado?</td><td>Sim (50%)</td><td>Depende da mãe</td><td>Nunca (pai dá Y ao filho)</td></tr>
+      <tr><td>Exemplos</td><td>Huntington, Marfan, Acondroplasia</td><td>FC, Falciforme, PKU, Tay-Sachs</td><td>Hemofilia, DMD, Daltonismo</td></tr>
+    </table></div>
+  </div>
+
+  <div class="box success">💡 <strong>Macete para identificar o padrão em heredograma:</strong><br>
+  — Afetados em toda geração, pai passa para filho → <strong>Dominante</strong><br>
+  — Pais saudáveis, filho doente → <strong>Recessiva</strong><br>
+  — Só homens afetados, mães portadoras → <strong>Ligada ao X recessiva</strong><br>
+  — Transmissão pai → filho (não para filha) → <strong>Ligada ao Y</strong> (muito rara)
+  </div>
+</div>
+
 <!-- ═══════════════════════ EXERCÍCIOS ═══════════════════════ -->
 <div class="page" id="page-exercicios">
   <div class="page-header">
@@ -913,6 +1138,20 @@ html.light .toggle-thumb{left:19px;background:#fff}
     </ol>
   </div>
 
+  <div class="card" style="border-left:3px solid var(--pink)">
+    <h3>🏥 DOENÇAS GENÉTICAS — Top 8 Pontos</h3>
+    <ol style="padding-left:1.25rem">
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Dominante:</strong> 1 alelo basta; pais afetados → 50% filhos afetados; não pula gerações</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Recessiva:</strong> 2 alelos necessários; pais portadores saudáveis (Aa); 25% filhos doentes; pula gerações</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Huntington:</strong> dominante, expansão de CAG &gt;36, início tardio (30–50 anos), degeneração neurológica</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Fibrose Cística:</strong> recessiva, gene CFTR (7q), mutação ΔF508 mais comum, canal de Cl⁻, muco espesso</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Anemia Falciforme:</strong> recessiva, gene HBB (11p), missense Glu→Val, hemácia em foice, vaso-oclusão</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Fenilcetonúria:</strong> recessiva, gene PAH, acúmulo de fenilalanina → DI; dieta desde nascimento</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Marfan:</strong> dominante, gene FBN1 (fibrilina), dilatação da aorta, luxação do cristalino, estatura alta</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">DMD:</strong> recessiva ligada ao X, gene DMD, sem distrofina, fraqueza muscular progressiva em meninos</li>
+    </ol>
+  </div>
+
   <div class="card" style="border-left:3px solid var(--teal)">
     <h3>🔬 EMBRIOLOGIA — Top 10 Pontos</h3>
     <ol style="padding-left:1.25rem">
@@ -936,6 +1175,9 @@ html.light .toggle-thumb{left:19px;background:#fff}
       <tr><td>Proporções de Mendel</td><td>"Qual proporção esperada no cruzamento Aa × Aa?" → 3:1</td></tr>
       <tr><td>Ligada ao X</td><td>"Daltonismo: pai daltônico, mãe normal. Qual chance do filho ser daltônico?" → 0% (filhos recebem Y do pai)</td></tr>
       <tr><td>Mutação</td><td>"Qual mutação trunca a proteína?" → Nonsense (códon de parada)</td></tr>
+      <tr><td>Doenças Dominantes</td><td>"Qual doença genética tem início tardio e é causada por expansão de CAG?" → Huntington</td></tr>
+      <tr><td>Doenças Recessivas</td><td>"Qual a doença genética letal mais comum em caucasianos?" → Fibrose Cística (CFTR)</td></tr>
+      <tr><td>Portadores</td><td>"Dois pais saudáveis têm filho doente. Qual o padrão mais provável?" → Autossômica recessiva</td></tr>
       <tr><td>Síndromes</td><td>"47,XXY é a síndrome de...?" → Klinefelter</td></tr>
       <tr><td>Gametogênese</td><td>"Em que fase o ovócito é ovulado?" → Metáfase II</td></tr>
       <tr><td>Fertilização</td><td>"Onde ocorre a fertilização?" → Ampola da tuba uterina</td></tr>
@@ -945,7 +1187,7 @@ html.light .toggle-thumb{left:19px;background:#fff}
   </div>
 
   <div class="box success" style="font-size:.95rem;padding:1.25rem">
-    <strong>🍀 Boa prova, Barbara!</strong><br>
+    <strong>🍀 Boa prova, Gabriel!</strong><br>
     07/05 às 19h10 · Professora Denise · 3,0 pontos<br>
     <span style="opacity:.8">Você estudou tudo — vai bem!</span>
   </div>
@@ -1133,6 +1375,61 @@ const QUIZ = [
     ans: 2,
     cat: "2ª Semana",
     exp: "O SINCICIOTROFOBLASTO produz β-hCG a partir do dia 8-10 após fertilização. Esse hormônio mantém o corpo lúteo funcionando → corpo lúteo continua produzindo progesterona → endométrio é mantido → gravidez não é interrompida. É o β-hCG que é DETECTADO NO TESTE DE GRAVIDEZ!"
+  },
+  {
+    q: "Um casal saudável tem um filho com Fibrose Cística. Qual é o padrão de herança mais provável e o risco de recorrência para futuros filhos?",
+    opts: [
+      "Autossômica dominante; risco de 50%",
+      "Autossômica recessiva; risco de 25%",
+      "Recessiva ligada ao X; risco de 50% nos filhos homens",
+      "Dominante ligada ao X; risco de 50%"
+    ],
+    ans: 1,
+    cat: "Doenças Genéticas",
+    exp: "Fibrose Cística é autossômica recessiva (gene CFTR). Dois pais saudáveis com filho doente = ambos os pais são portadores (Aa × Aa). A cada gravidez: 25% de chance de filho doente (aa), 50% de portador (Aa) e 25% normal (AA). O risco de recorrência é sempre 25% independente dos filhos anteriores."
+  },
+  {
+    q: "A Doença de Huntington é autossômica dominante causada por expansão de repetições CAG. Um pai afetado (heterozigoto) e uma mãe saudável têm 4 filhos. Quantos filhos, EM MÉDIA, serão afetados?",
+    opts: ["0 filhos", "1 filho", "2 filhos", "4 filhos"],
+    ans: 2,
+    cat: "Doenças Genéticas",
+    exp: "Na herança autossômica dominante, o progenitor afetado (Aa) × normal (aa) produz 50% de descendentes afetados (Aa) e 50% normais (aa). Em 4 filhos, a média esperada é 4 × 50% = 2 filhos afetados. Importante: cada gravidez tem 50% de risco independentemente, então pode ser qualquer número de 0 a 4."
+  },
+  {
+    q: "A anemia falciforme é causada por uma mutação missense no gene HBB que substitui glutamato por valina. Qual é o efeito molecular dessa substituição?",
+    opts: [
+      "A hemoglobina S (HbS) polimeriza em baixa concentração de O₂, deformando a hemácia em forma de foice",
+      "A hemoglobina S produz proteína truncada que não funciona",
+      "A mutação frameshift altera todo o quadro de leitura da cadeia beta",
+      "A mutação silenciosa não altera a proteína, mas reduz sua produção"
+    ],
+    ans: 0,
+    cat: "Doenças Genéticas",
+    exp: "É uma mutação MISSENSE (Glu→Val na posição 6). A valina é hidrofóbica, ao contrário do glutamato. Em baixa tensão de O₂, a HbS polimeriza em filamentos rígidos → hemácias em foice → obstrução de capilares (crises vaso-oclusivas), hemólise e anemia. Heterozigotos (traço falciforme) são geralmente saudáveis e têm proteção parcial à malária."
+  },
+  {
+    q: "Um menino de 5 anos apresenta fraqueza muscular progressiva, dificuldade para levantar do chão usando as mãos para 'escalar' as próprias pernas (sinal de Gowers) e pseudohipertrofia de panturrilhas. O CPK está muito elevado. Qual o diagnóstico mais provável e o padrão de herança?",
+    opts: [
+      "Atrofia Muscular Espinhal — autossômica recessiva",
+      "Síndrome de Marfan — autossômica dominante",
+      "Distrofia Muscular de Duchenne — recessiva ligada ao X",
+      "Neurofibromatose tipo 1 — autossômica dominante"
+    ],
+    ans: 2,
+    cat: "Doenças Genéticas",
+    exp: "O quadro clínico é clássico de DMD (Distrofia Muscular de Duchenne): meninos, início precoce (~3–5 anos), sinal de Gowers (usa as mãos para 'escalar' as próprias pernas ao levantar), pseudohipertrofia de panturrilhas (substituição de músculo por tecido adiposo) e CPK altíssimo. É recessiva ligada ao X (gene DMD, Xp21) — por isso afeta quase exclusivamente meninos."
+  },
+  {
+    q: "Qual das seguintes características é EXCLUSIVA das doenças autossômicas DOMINANTES — e NÃO ocorre nas recessivas?",
+    opts: [
+      "Afeta igualmente homens e mulheres",
+      "A doença não pula gerações — pais afetados transmitem diretamente aos filhos",
+      "Pode ser detectada pelo teste do pezinho",
+      "Pode ser causada por mutação de novo (esporádica)"
+    ],
+    ans: 1,
+    cat: "Doenças Genéticas",
+    exp: "Herança DOMINANTE = herança vertical: afetados aparecem em todas as gerações consecutivas porque basta 1 alelo mutante. Nas recessivas, pais portadores são saudáveis → a doença 'pula' gerações. As outras alternativas não são exclusivas: homens e mulheres podem ser afetados em ambas; teste do pezinho detecta FC (recessiva) e PKU (recessiva); mutações de novo ocorrem em dominantes (ex: acondroplasia 80% de novo) MAS também podem ocorrer em recessivas."
   }
 ];
 
@@ -1205,6 +1502,20 @@ const CARDS = [
   ["β-hCG", "Gonadotrofina coriônica humana. Produzida pelo sinciciotrofoblasto a partir do dia 8-10. Detectada no teste de gravidez. Mantém o corpo lúteo e a produção de progesterona."],
   ["Clivagem", "Divisões mitóticas do zigoto SEM crescimento celular. Células (blastômeros) ficam cada vez menores. Ocorre dentro da zona pelúcida. Mórula = ~16 células."],
   ["Dogma Central", "DNA →(replicação)→ DNA | DNA →(transcrição)→ RNA | RNA →(tradução)→ Proteína. Transcrição no núcleo. Tradução nos ribossomos."],
+  // ── Doenças Genéticas ──
+  ["Herança Autossômica Dominante", "1 alelo mutante basta. Heterozigoto Aa é afetado. Pais afetados → 50% filhos afetados. Não pula gerações. Ex: Huntington, Marfan, Acondroplasia."],
+  ["Herança Autossômica Recessiva", "2 alelos mutantes necessários. Pais portadores (Aa) são saudáveis. Pais Aa × Aa → 25% doente, 50% portador, 25% normal. Pula gerações. Ex: FC, Falciforme, PKU."],
+  ["Portador (Carrier)", "Heterozigoto (Aa) saudável que carrega 1 alelo recessivo mutante. Só existe nas recessivas. Pode transmitir sem estar doente."],
+  ["Doença de Huntington", "Autossômica DOMINANTE. Gene HTT (4p). Expansão de CAG >36. Degeneração neurológica progressiva, início tardio (30–50 anos). Coreia, demência. Sem cura. Antecipação."],
+  ["Acondroplasia", "Autossômica DOMINANTE. Gene FGFR3 (4p). 80% mutações de novo. Forma mais comum de nanismo: membros curtos, tronco normal, macrocefalia."],
+  ["Síndrome de Marfan", "Autossômica DOMINANTE. Gene FBN1 (15q) — fibrilina-1. Estatura alta, dedos aracnodáctilos, luxação do cristalino, DILATAÇÃO DA AORTA (emergência!)."],
+  ["Neurofibromatose tipo 1", "Autossômica DOMINANTE. Gene NF1 (17q). Manchas café-com-leite (>6), neurofibromas, nódulos de Lisch. Expressividade variável. Frequente (1:3.000)."],
+  ["Fibrose Cística", "Autossômica RECESSIVA. Gene CFTR (7q). Mutação mais comum: ΔF508. Canal de Cl⁻ defeituoso → muco espesso. Mais comum doença genética letal em caucasianos. Teste do pezinho."],
+  ["Anemia Falciforme", "Autossômica RECESSIVA. Gene HBB (11p). Missense Glu→Val (HbS). Hemácias em foice → vaso-oclusão. Mais comum em afrodescendentes. Heterozigotos: proteção à malária."],
+  ["Fenilcetonúria (PKU)", "Autossômica RECESSIVA. Gene PAH. Acúmulo de fenilalanina → neurotóxica → DI grave. Tratamento: dieta sem fenilalanina. Detectada no teste do pezinho."],
+  ["Doença de Tay-Sachs", "Autossômica RECESSIVA. Gene HEXA. Deficiência de hexosaminidase A → acúmulo de GM2 nos neurônios. Mancha vermelho-cereja na mácula. Fatal na infância. Comum em judeus Ashkenazi."],
+  ["DMD — Duchenne", "Recessiva LIGADA AO X. Gene DMD (Xp21). Sem distrofina. Meninos: fraqueza progressiva, sinal de Gowers, pseudohipertrofia de panturrilha, CPK altíssimo. Fatal na 3ª década."],
+  ["Hemofilia A e B", "Recessiva LIGADA AO X. Hemofilia A: fator VIII (F8, Xq28). Hemofilia B: fator IX (F9, Xq27). Sangramento excessivo, hemartroses. Tratamento: reposição do fator."],
 ];
 
 function buildFlashcards() {
@@ -1214,6 +1525,7 @@ function buildFlashcards() {
     { title: "🔴 Síndromes Cromossômicas", range: [9,12] },
     { title: "🔵 Gametogênese & Fertilização", range: [12,18] },
     { title: "🏗️ Desenvolvimento Embrionário", range: [18,25] },
+    { title: "🏥 Doenças Genéticas Dominantes & Recessivas", range: [25,38] },
   ];
   const c = document.getElementById('fc-container');
   c.innerHTML = groups.map(g => {
