@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Estudos A2 — Genética & Embriologia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090e;--surface:#0f1018;--card:#13141f;--border:#1c1e2e;
+  --accent:#4f46e5;--accent2:#818cf8;--green:#10b981;--red:#f43f5e;
+  --yellow:#f59e0b;--teal:#06b6d4;--pink:#ec4899;
+  --text:#e2e8f0;--muted:#64748b;--sub:#94a3b8;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.65;display:flex;min-height:100vh}
+
+/* ── SIDEBAR ── */
+#sidebar{
+  width:260px;min-width:260px;background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:50;
+}
+.sb-logo{padding:1.25rem 1.25rem .75rem;border-bottom:1px solid var(--border)}
+.sb-logo h1{font-size:.95rem;font-weight:700;color:var(--accent2)}
+.sb-logo p{font-size:.75rem;color:var(--muted);margin-top:.2rem}
+.exam-badge{
+  margin:.75rem 1rem;padding:.6rem 1rem;
+  background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.2);
+  border-radius:10px;text-align:center;
+}
+.exam-badge .date{font-size:.85rem;font-weight:700;color:#fca5a5}
+.exam-badge .sub{font-size:.72rem;color:var(--muted)}
+#countdown{font-size:1.4rem;font-weight:800;color:var(--red);font-family:'JetBrains Mono',monospace}
+.sb-section{padding:.5rem 1rem .25rem;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600}
+.sb-link{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.55rem 1.25rem;font-size:.85rem;color:var(--sub);
+  text-decoration:none;border-left:3px solid transparent;
+  transition:all .15s;cursor:pointer;
+}
+.sb-link:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.sb-link.active{color:var(--accent2);border-left-color:var(--accent2);background:rgba(79,70,229,.08)}
+.sb-link .icon{font-size:1rem;width:20px;text-align:center}
+.sb-progress{padding:1rem 1.25rem;margin-top:auto;border-top:1px solid var(--border)}
+.sb-progress p{font-size:.75rem;color:var(--muted);margin-bottom:.4rem}
+.progress-bar{height:5px;background:var(--border);border-radius:3px}
+.progress-fill{height:5px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;transition:width .4s}
+
+/* ── MAIN ── */
+#main{margin-left:260px;flex:1;padding:2.5rem;max-width:900px}
+.page{display:none}
+.page.active{display:block}
+
+/* ── COMPONENTS ── */
+.page-header{margin-bottom:2.5rem}
+.page-tag{font-size:.75rem;color:var(--accent2);text-transform:uppercase;letter-spacing:.1em;font-family:'JetBrains Mono',monospace;margin-bottom:.4rem}
+.page-title{font-size:2rem;font-weight:800;margin-bottom:.5rem}
+.page-line{width:48px;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;margin-bottom:1rem}
+.page-desc{color:var(--muted);font-size:.95rem;max-width:620px}
+
+/* cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.25rem}
+.card h3{font-size:1rem;font-weight:700;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+.card p,.card li{color:var(--sub);font-size:.9rem}
+.card ul,.card ol{padding-left:1.25rem}
+.card li{margin-bottom:.35rem}
+.card strong{color:var(--text)}
+
+/* highlight boxes */
+.box{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;font-size:.88rem}
+.box.info{background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.2);color:#7dd3fc}
+.box.warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:#fde68a}
+.box.success{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);color:#6ee7b7}
+.box.danger{background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.2);color:#fca5a5}
+.box strong{color:inherit}
+
+/* table */
+.tbl-wrap{overflow-x:auto;margin:1rem 0}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{background:rgba(79,70,229,.15);color:var(--accent2);padding:.65rem 1rem;text-align:left;border-bottom:1px solid var(--border)}
+td{padding:.6rem 1rem;border-bottom:1px solid var(--border);color:var(--sub)}
+tr:hover td{background:rgba(255,255,255,.02)}
+
+/* punnett square */
+.punnett{display:inline-grid;grid-template-columns:40px repeat(2,60px);gap:2px;margin:1rem 0}
+.punnett .hdr{background:rgba(79,70,229,.2);color:var(--accent2);text-align:center;padding:.4rem;border-radius:6px;font-weight:700;font-family:'JetBrains Mono',monospace;font-size:.85rem}
+.punnett .cell{background:var(--card);border:1px solid var(--border);text-align:center;padding:.4rem;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--text)}
+
+/* quiz */
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.25rem}
+.quiz-card .q-num{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:.5rem}
+.quiz-card .q-text{font-size:.95rem;font-weight:600;margin-bottom:1rem;line-height:1.5}
+.options{display:flex;flex-direction:column;gap:.5rem}
+.opt{
+  display:flex;align-items:flex-start;gap:.75rem;
+  padding:.75rem 1rem;border-radius:8px;cursor:pointer;
+  border:1px solid var(--border);background:var(--surface);
+  font-size:.88rem;color:var(--sub);transition:all .15s;
+  text-align:left;width:100%;
+}
+.opt:hover{border-color:var(--accent2);color:var(--text)}
+.opt.correct{border-color:var(--green)!important;background:rgba(16,185,129,.1)!important;color:#6ee7b7!important}
+.opt.wrong{border-color:var(--red)!important;background:rgba(244,63,94,.08)!important;color:#fca5a5!important}
+.opt-letter{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent2);min-width:20px}
+.q-explain{margin-top:1rem;padding:.85rem 1rem;background:rgba(79,70,229,.08);border:1px solid rgba(79,70,229,.2);border-radius:8px;font-size:.84rem;color:#c4b5fd;display:none}
+
+/* flashcards */
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:1rem}
+.fc{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  min-height:140px;display:flex;align-items:center;justify-content:center;
+  padding:1.25rem;text-align:center;cursor:pointer;position:relative;
+  transition:transform .15s,border-color .15s;
+}
+.fc:hover{border-color:var(--accent);transform:translateY(-2px)}
+.fc .front{font-size:.85rem;font-weight:600;color:var(--accent2)}
+.fc .back{display:none;font-size:.82rem;color:var(--sub)}
+.fc.flipped .front{display:none}
+.fc.flipped .back{display:block}
+.fc.flipped{background:rgba(79,70,229,.1);border-color:var(--accent)}
+.fc-hint{font-size:.7rem;color:var(--muted);margin-top:.4rem}
+
+/* timeline */
+.timeline{position:relative;padding-left:2rem;margin:1rem 0}
+.timeline::before{content:'';position:absolute;left:.5rem;top:0;bottom:0;width:2px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:1.25rem}
+.tl-item::before{content:'';position:absolute;left:-1.62rem;top:.35rem;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
+.tl-title{font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:.25rem}
+.tl-body{font-size:.83rem;color:var(--sub)}
+
+/* score */
+.score-bar{display:flex;align-items:center;gap:.75rem;margin:.5rem 0}
+.score-label{font-size:.8rem;color:var(--muted);min-width:80px}
+.score-track{flex:1;height:8px;background:var(--border);border-radius:4px}
+.score-fill{height:8px;border-radius:4px;transition:width .6s}
+
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .6rem;border-radius:5px;font-size:.75rem;font-weight:600;font-family:'JetBrains Mono',monospace}
+.badge.purple{background:rgba(79,70,229,.15);color:var(--accent2);border:1px solid rgba(79,70,229,.25)}
+.badge.green{background:rgba(16,185,129,.12);color:#6ee7b7;border:1px solid rgba(16,185,129,.25)}
+.badge.red{background:rgba(244,63,94,.1);color:#fca5a5;border:1px solid rgba(244,63,94,.25)}
+.badge.yellow{background:rgba(245,158,11,.1);color:#fde68a;border:1px solid rgba(245,158,11,.25)}
+.badge.teal{background:rgba(6,182,212,.1);color:#7dd3fc;border:1px solid rgba(6,182,212,.25)}
+
+/* checklist */
+.checklist{list-style:none;padding:0}
+.checklist li{display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;font-size:.88rem;color:var(--sub);cursor:pointer}
+.checklist li input{accent-color:var(--accent);width:14px;height:14px;margin-top:.2rem;flex-shrink:0}
+.checklist li.done{color:var(--muted);text-decoration:line-through}
+
+/* btn */
+.btn{padding:.55rem 1.2rem;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#4338ca}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--text);border-color:var(--sub)}
+
+/* scrollbar */
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+@media(max-width:768px){
+  #sidebar{width:100%;height:auto;position:static;flex-direction:row;flex-wrap:wrap;overflow-x:auto}
+  #main{margin-left:0;padding:1.25rem}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-logo">
+    <h1>Estudos A2</h1>
+    <p>Genética & Embriologia</p>
+  </div>
+  <div class="exam-badge">
+    <div class="sub">Prova em</div>
+    <div id="countdown">--</div>
+    <div class="date">07/05 às 19h10 · 3,0 pts</div>
+  </div>
+
+  <div class="sb-section">Conteúdo</div>
+  <a class="sb-link active" onclick="go('dashboard')"><span class="icon">🏠</span>Dashboard</a>
+
+  <div class="sb-section">Genética (1,5 pt)</div>
+  <a class="sb-link" onclick="go('mendeliana')"><span class="icon">🧬</span>Genética Mendeliana</a>
+  <a class="sb-link" onclick="go('heranca')"><span class="icon">🔬</span>Padrões de Herança</a>
+  <a class="sb-link" onclick="go('molecular')"><span class="icon">🧪</span>Genética Molecular</a>
+  <a class="sb-link" onclick="go('cromossomica')"><span class="icon">🔴</span>Mutação Cromossômica</a>
+
+  <div class="sb-section">Embriologia (1,5 pt)</div>
+  <a class="sb-link" onclick="go('reprodutivo')"><span class="icon">⚕️</span>Sistema Reprodutivo</a>
+  <a class="sb-link" onclick="go('gametogenese')"><span class="icon">🔵</span>Gametogênese</a>
+  <a class="sb-link" onclick="go('fertilizacao')"><span class="icon">✨</span>Fertilização</a>
+  <a class="sb-link" onclick="go('semana1')"><span class="icon">1️⃣</span>1ª Semana</a>
+  <a class="sb-link" onclick="go('semana2')"><span class="icon">2️⃣</span>2ª Semana</a>
+
+  <div class="sb-section">Praticar</div>
+  <a class="sb-link" onclick="go('exercicios')"><span class="icon">📝</span>Exercícios</a>
+  <a class="sb-link" onclick="go('flashcards')"><span class="icon">🃏</span>Flashcards</a>
+  <a class="sb-link" onclick="go('resumao')"><span class="icon">⚡</span>Resumão Final</a>
+
+  <div class="sb-progress">
+    <p>Progresso: <span id="pct">0%</span></p>
+    <div class="progress-bar"><div class="progress-fill" id="pfill" style="width:0%"></div></div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+
+<!-- ═══════════════════════ DASHBOARD ═══════════════════════ -->
+<div class="page active" id="page-dashboard">
+  <div class="page-header">
+    <p class="page-tag">// início</p>
+    <h1 class="page-title">Olá, Barbara! 👋</h1>
+    <div class="page-line"></div>
+    <p class="page-desc">Sua A2 vale <strong style="color:var(--accent2)">3,0 pontos</strong> — 1,5 de Genética e 1,5 de Embriologia. Use este guia para dominar cada tópico com teoria, exercícios e flashcards.</p>
+  </div>
+
+  <div class="box warn">
+    <strong>⏰ Prova:</strong> 07 de maio de 2026 às 19h10 · Professora Denise
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+    <div class="card" style="border-left:3px solid var(--accent)">
+      <h3>🧬 Genética (1,5 pt)</h3>
+      <ul>
+        <li>Genética Mendeliana</li>
+        <li>Padrões de Herança</li>
+        <li>Genética Molecular e Mutação</li>
+        <li>Mutação Cromossômica</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid var(--teal)">
+      <h3>🔬 Embriologia (1,5 pt)</h3>
+      <ul>
+        <li>Sistema Reprodutivo</li>
+        <li>Gametogênese</li>
+        <li>Fertilização</li>
+        <li>1ª Semana de Desenvolvimento</li>
+        <li>2ª Semana de Desenvolvimento</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📅 Plano de Estudos — 8 dias</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Dia</th><th>Data</th><th>Conteúdo</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge yellow">Dia 1</span></td><td>29/04 (Hoje)</td><td>Genética Mendeliana completa + Quadrado de Punnett</td></tr>
+          <tr><td><span class="badge yellow">Dia 2</span></td><td>30/04</td><td>Padrões de Herança (dominância incompleta, codominância, ligada ao X)</td></tr>
+          <tr><td><span class="badge yellow">Dia 3</span></td><td>01/05</td><td>Genética Molecular (DNA→RNA→Proteína) + Tipos de Mutação</td></tr>
+          <tr><td><span class="badge yellow">Dia 4</span></td><td>02/05</td><td>Mutação Cromossômica + Síndromes</td></tr>
+          <tr><td><span class="badge teal">Dia 5</span></td><td>03/05</td><td>Sistema Reprodutivo + Gametogênese (comparativo)</td></tr>
+          <tr><td><span class="badge teal">Dia 6</span></td><td>04/05</td><td>Fertilização + 1ª Semana de Desenvolvimento</td></tr>
+          <tr><td><span class="badge teal">Dia 7</span></td><td>05/05</td><td>2ª Semana de Desenvolvimento + Revisão geral</td></tr>
+          <tr><td><span class="badge green">Dia 8</span></td><td>06/05</td><td>Exercícios + Flashcards + Resumão Final</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>✅ Checklist de Estudos</h3>
+    <ul class="checklist" id="checklist">
+      <li><input type="checkbox" onchange="updateProgress()"> Estudei Genética Mendeliana</li>
+      <li><input type="checkbox" onchange="updateProgress()"> Estudei Padrões de Herança</li>
+      <li><input type="checkbox" onchange="updateProgress()"> Estudei Genética Molecular</li>
+      <li><input type="checkbox" onchange="updateProgress()"> Estudei Mutação Cromossômica</li>
+      <li><input type="checkbox" onchange="updateProgress()"> Estudei Sistema Reprodutivo</li>
+      <li><input type="checkbox" onchange="updateProgress()"> Estudei Gametogênese</li>
+      <li><input type="checkbox" onchange="updateProgress()"> Estudei Fertilização</li>
+      <li><input type="checkbox" onchange="updateProgress()"> Estudei 1ª Semana</li>
+      <li><input type="checkbox" onchange="updateProgress()"> Estudei 2ª Semana</li>
+      <li><input type="checkbox" onchange="updateProgress()"> Fiz todos os exercícios</li>
+      <li><input type="checkbox" onchange="updateProgress()"> Revisei os flashcards</li>
+      <li><input type="checkbox" onchange="updateProgress()"> Li o resumão final</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════ GENÉTICA MENDELIANA ═══════════════════════ -->
+<div class="page" id="page-mendeliana">
+  <div class="page-header">
+    <p class="page-tag">// genética · 1,5 pt</p>
+    <h1 class="page-title">🧬 Genética Mendeliana</h1>
+    <div class="page-line"></div>
+    <p class="page-desc">As leis de Mendel são a base de toda a genética clássica. Dominar os conceitos de segregação e proporções é essencial.</p>
+  </div>
+
+  <div class="card">
+    <h3>📖 Conceitos Fundamentais</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Termo</th><th>Definição</th></tr>
+      <tr><td><strong>Gene</strong></td><td>Unidade de herança; segmento de DNA que codifica uma proteína</td></tr>
+      <tr><td><strong>Alelo</strong></td><td>Versão alternativa de um gene (ex: A e a)</td></tr>
+      <tr><td><strong>Lócus</strong></td><td>Posição do gene no cromossomo</td></tr>
+      <tr><td><strong>Genótipo</strong></td><td>Constituição genética (AA, Aa, aa)</td></tr>
+      <tr><td><strong>Fenótipo</strong></td><td>Característica observável (aparência, função)</td></tr>
+      <tr><td><strong>Homozigoto dominante</strong></td><td>AA — dois alelos dominantes</td></tr>
+      <tr><td><strong>Heterozigoto</strong></td><td>Aa — um alelo dominante, um recessivo</td></tr>
+      <tr><td><strong>Homozigoto recessivo</strong></td><td>aa — dois alelos recessivos</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>⚖️ 1ª Lei de Mendel — Lei da Segregação</h3>
+    <div class="box info"><strong>Enunciado:</strong> Cada caráter é determinado por um par de fatores (alelos) que se separam durante a formação dos gametas, de modo que cada gameta recebe apenas um alelo de cada par.</div>
+    <ul style="margin:.5rem 0 0 1rem">
+      <li>Experimento clássico: ervilhas de Mendel (cor da flor, forma da semente)</li>
+      <li>Cruzamento P (parental) → F1 (geração filial 1) → F2 (geração filial 2)</li>
+      <li>F2 apresenta proporção <strong>3 dominante : 1 recessivo</strong> (fenotípica)</li>
+      <li>Proporção genotípica F2: <strong>1 AA : 2 Aa : 1 aa</strong></li>
+    </ul>
+    <br>
+    <strong>Quadrado de Punnett — Monoíbrido (Aa × Aa):</strong>
+    <div class="punnett">
+      <div class="hdr"></div><div class="hdr">A</div><div class="hdr">a</div>
+      <div class="hdr">A</div><div class="cell">AA</div><div class="cell">Aa</div>
+      <div class="hdr">a</div><div class="cell">Aa</div><div class="cell">aa</div>
+    </div>
+    <div class="box success"><strong>Resultado:</strong> 1 AA : 2 Aa : 1 aa → 3 fenotipo dominante : 1 fenótipo recessivo</div>
+  </div>
+
+  <div class="card">
+    <h3>⚖️ 2ª Lei de Mendel — Lei da Segregação Independente</h3>
+    <div class="box info"><strong>Enunciado:</strong> Os fatores para caracteres diferentes se segregam independentemente uns dos outros durante a formação dos gametas.</div>
+    <ul style="margin:.5rem 0 0 1rem">
+      <li>Aplica-se a genes em <strong>cromossomos diferentes</strong> ou muito distantes no mesmo cromossomo</li>
+      <li>Cruzamento diíbrido: AaBb × AaBb</li>
+      <li>Gametas possíveis de AaBb: <strong>AB, Ab, aB, ab</strong> (25% cada)</li>
+      <li>Proporção fenotípica F2: <strong>9 : 3 : 3 : 1</strong></li>
+    </ul>
+    <div class="box warn"><strong>Atenção:</strong> Genes ligados (no mesmo cromossomo e próximos) NÃO seguem a 2ª Lei — tendem a ser herdados juntos!</div>
+  </div>
+
+  <div class="card">
+    <h3>📊 Tabela de Proporções Mendelianas</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Cruzamento</th><th>Proporção Fenotípica</th><th>Proporção Genotípica</th></tr>
+      <tr><td>Aa × Aa (monoíbrido)</td><td>3 : 1</td><td>1 : 2 : 1</td></tr>
+      <tr><td>AA × aa (parental puro)</td><td>Tudo dominante</td><td>Tudo Aa</td></tr>
+      <tr><td>Aa × aa (testcross)</td><td>1 : 1</td><td>1 Aa : 1 aa</td></tr>
+      <tr><td>AaBb × AaBb (diíbrido)</td><td>9 : 3 : 3 : 1</td><td>—</td></tr>
+    </table></div>
+  </div>
+
+  <div class="box success">💡 <strong>Dica de prova:</strong> Quando o enunciado falar em "proporção 3:1" → monoíbrido mendeliano clássico. "9:3:3:1" → diíbrido. Se a proporção for diferente, há alguma modificação (dominância incompleta, epistasia, etc.).</div>
+</div>
+
+<!-- ═══════════════════════ PADRÕES DE HERANÇA ═══════════════════════ -->
+<div class="page" id="page-heranca">
+  <div class="page-header">
+    <p class="page-tag">// genética · 1,5 pt</p>
+    <h1 class="page-title">🔬 Padrões de Herança</h1>
+    <div class="page-line"></div>
+    <p class="page-desc">Extensões e exceções às leis de Mendel que explicam herança complexa.</p>
+  </div>
+
+  <div class="card">
+    <h3>🟡 Dominância Incompleta</h3>
+    <p>O heterozigoto apresenta <strong>fenótipo intermediário</strong> — nenhum alelo é completamente dominante.</p>
+    <div style="margin:.75rem 0">
+      <strong>Exemplo clássico:</strong> Mirabilis jalapa (boca-de-leão)<br>
+      <span class="badge red">VV = vermelho</span> &nbsp; <span class="badge teal">vv = branco</span> &nbsp; <span class="badge yellow">Vv = rosa (intermediário)</span>
+    </div>
+    <div class="punnett">
+      <div class="hdr"></div><div class="hdr">V</div><div class="hdr">v</div>
+      <div class="hdr">V</div><div class="cell">VV</div><div class="cell">Vv</div>
+      <div class="hdr">v</div><div class="cell">Vv</div><div class="cell">vv</div>
+    </div>
+    <div class="box warn">Na dominância incompleta: proporção fenotípica = genotípica = <strong>1 : 2 : 1</strong></div>
+  </div>
+
+  <div class="card">
+    <h3>🔵 Codominância</h3>
+    <p>Ambos os alelos são expressos <strong>simultaneamente e igualmente</strong> no heterozigoto.</p>
+    <div class="box info"><strong>Exemplo clássico:</strong> Sistema ABO — tipo sanguíneo AB (I<sup>A</sup>I<sup>B</sup>) expressa antígeno A E antígeno B</div>
+    <div class="tbl-wrap"><table>
+      <tr><th>Genótipo</th><th>Fenótipo (Tipo Sanguíneo)</th></tr>
+      <tr><td>I<sup>A</sup>I<sup>A</sup> ou I<sup>A</sup>i</td><td>A</td></tr>
+      <tr><td>I<sup>B</sup>I<sup>B</sup> ou I<sup>B</sup>i</td><td>B</td></tr>
+      <tr><td>I<sup>A</sup>I<sup>B</sup></td><td>AB (codominância)</td></tr>
+      <tr><td>ii</td><td>O</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>🔗 Herança Ligada ao Sexo (Cromossomo X)</h3>
+    <ul>
+      <li>Gene localizado no cromossomo X</li>
+      <li>Homens (XY): hemizigoto — expressam a condição com apenas um alelo</li>
+      <li>Mulheres (XX): precisam de dois alelos recessivos para expressar (recessivas) ou um dominante</li>
+    </ul>
+    <br>
+    <strong>Herança Recessiva Ligada ao X:</strong>
+    <div class="tbl-wrap"><table>
+      <tr><th>Genótipo</th><th>Sexo</th><th>Fenótipo</th></tr>
+      <tr><td>X<sup>A</sup>X<sup>A</sup></td><td>Feminino</td><td>Normal</td></tr>
+      <tr><td>X<sup>A</sup>X<sup>a</sup></td><td>Feminino</td><td><strong>Portadora</strong> (normal)</td></tr>
+      <tr><td>X<sup>a</sup>X<sup>a</sup></td><td>Feminino</td><td>Afetada</td></tr>
+      <tr><td>X<sup>A</sup>Y</td><td>Masculino</td><td>Normal</td></tr>
+      <tr><td>X<sup>a</sup>Y</td><td>Masculino</td><td><strong>Afetado</strong></td></tr>
+    </table></div>
+    <div class="box danger">📌 Exemplos: <strong>Daltonismo</strong>, <strong>Hemofilia A e B</strong>, Distrofia Muscular de Duchenne<br>Homens são afetados com maior frequência!</div>
+    <div class="box success">💡 Pai afetado NÃO passa para o filho (XY: o X vai para as filhas), mas TODAS as filhas serão portadoras.</div>
+  </div>
+
+  <div class="card">
+    <h3>📋 Herança Autossômica — Comparativo</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Tipo</th><th>Característica</th><th>Exemplo</th></tr>
+      <tr><td>Autossômica Dominante</td><td>Heterozigoto é afetado; pais afetados têm filhos afetados; sem portadores</td><td>Acondroplasia, Huntington, Polidactilia</td></tr>
+      <tr><td>Autossômica Recessiva</td><td>Necessita dois alelos; pais podem ser portadores saudáveis</td><td>Fibrose cística, Fenilcetonúria, Albinismo</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>🔀 Pleiotropia e Epistasia</h3>
+    <ul>
+      <li><strong>Pleiotropia:</strong> um gene afeta múltiplas características. Ex: fenilcetonúria (afeta metabolismo, neurológico, pigmentação)</li>
+      <li><strong>Epistasia:</strong> um gene interfere na expressão de outro gene. Ex: pigmentação da pelagem em cães pode ter proporções 9:7 ou 12:3:1 em vez de 9:3:3:1</li>
+    </ul>
+  </div>
+
+  <div class="box success">💡 <strong>Dica:</strong> Para diferenciar dominância incompleta de codominância — na incompleta o fenótipo é INTERMEDIÁRIO (mistura); na codominância os dois fenótipos aparecem LADO A LADO (ex: gado roan: pelos vermelhos E brancos misturados, mas cada pelo tem uma cor)</div>
+</div>
+
+<!-- ═══════════════════════ GENÉTICA MOLECULAR ═══════════════════════ -->
+<div class="page" id="page-molecular">
+  <div class="page-header">
+    <p class="page-tag">// genética · 1,5 pt</p>
+    <h1 class="page-title">🧪 Genética Molecular & Mutação</h1>
+    <div class="page-line"></div>
+    <p class="page-desc">Do DNA à proteína, e como as mutações alteram essa informação.</p>
+  </div>
+
+  <div class="card">
+    <h3>🧬 Dogma Central da Biologia Molecular</h3>
+    <div class="box info" style="text-align:center;font-size:1.1rem;font-family:'JetBrains Mono',monospace">
+      DNA → <strong>Replicação</strong> → DNA<br>
+      DNA → <strong>Transcrição</strong> → RNA<br>
+      RNA → <strong>Tradução</strong> → Proteína
+    </div>
+    <div class="tbl-wrap"><table>
+      <tr><th>Processo</th><th>Local</th><th>Molde</th><th>Produto</th><th>Enzima principal</th></tr>
+      <tr><td>Replicação</td><td>Núcleo</td><td>DNA</td><td>DNA (cópia)</td><td>DNA polimerase</td></tr>
+      <tr><td>Transcrição</td><td>Núcleo</td><td>DNA (fita molde)</td><td>mRNA</td><td>RNA polimerase</td></tr>
+      <tr><td>Tradução</td><td>Ribossomos (citoplasma)</td><td>mRNA</td><td>Proteína</td><td>Ribossomos + tRNA</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>🔤 DNA vs RNA — Diferenças</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Característica</th><th>DNA</th><th>RNA</th></tr>
+      <tr><td>Estrutura</td><td>Dupla fita</td><td>Fita simples</td></tr>
+      <tr><td>Açúcar</td><td>Desoxirribose</td><td>Ribose</td></tr>
+      <tr><td>Bases nitrogenadas</td><td>A, T, G, C</td><td>A, <strong>U</strong>, G, C</td></tr>
+      <tr><td>Pares de bases</td><td>A=T, G≡C</td><td>A=U (no molde)</td></tr>
+    </table></div>
+    <div class="box warn">⚠️ No RNA: Timina (T) é substituída por <strong>Uracila (U)</strong>!</div>
+  </div>
+
+  <div class="card">
+    <h3>📌 Tipos de Mutação Puntual (Ponto)</h3>
+    <p style="margin-bottom:.75rem">Afetam <strong>uma única base</strong> (nucleotídeo) do DNA.</p>
+    <div class="tbl-wrap"><table>
+      <tr><th>Tipo</th><th>O que ocorre</th><th>Consequência</th><th>Exemplo</th></tr>
+      <tr><td><span class="badge green">Silenciosa</span></td><td>Troca de base, mas mesmo aminoácido (código degenerado)</td><td>Nenhuma — proteína normal</td><td>UCA → UCG (ambos = Ser)</td></tr>
+      <tr><td><span class="badge yellow">Missense (sentido trocado)</span></td><td>Troca de base → aminoácido diferente</td><td>Proteína alterada (pode ser funcional ou não)</td><td>Anemia falciforme (Glu → Val)</td></tr>
+      <tr><td><span class="badge red">Nonsense (sem sentido)</span></td><td>Troca de base → códon de parada (UAA, UAG, UGA)</td><td>Proteína truncada (incompleta) — geralmente não funcional</td><td>UCA → UGA</td></tr>
+      <tr><td><span class="badge red">Frameshift</span></td><td>Inserção ou deleção de bases (não múltiplo de 3)</td><td>Muda todo o quadro de leitura → proteína totalmente alterada</td><td>+1 base altera todos os codons após a mutação</td></tr>
+    </table></div>
+    <div class="box success">💡 <strong>Macete:</strong> Frameshift em deleção/inserção de <strong>1 ou 2</strong> bases muda o quadro de leitura. Deleção/inserção de <strong>3 bases</strong> = insere/remove um aminoácido sem mudar o quadro de leitura.</div>
+  </div>
+
+  <div class="card">
+    <h3>🎯 Código Genético — Conceitos-chave</h3>
+    <ul>
+      <li><strong>Códon:</strong> tripla de bases do mRNA que codifica um aminoácido</li>
+      <li><strong>Anticódon:</strong> tripla complementar no tRNA</li>
+      <li><strong>Degenerado:</strong> mais de um códon para o mesmo aminoácido (64 códons → 20 aminoácidos)</li>
+      <li><strong>Não ambíguo:</strong> cada códon codifica apenas 1 aminoácido</li>
+      <li><strong>Universal:</strong> o mesmo código em (quase) todos os organismos</li>
+      <li><strong>Códon de início:</strong> AUG (metionina)</li>
+      <li><strong>Códons de parada:</strong> UAA, UAG, UGA</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>⚗️ Agentes Mutagênicos</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Tipo</th><th>Exemplos</th><th>Mecanismo</th></tr>
+      <tr><td>Físicos</td><td>Radiação UV, raios X, raios gama</td><td>Quebram fitas de DNA, formam dímeros de timina</td></tr>
+      <tr><td>Químicos</td><td>Benzeno, aflatoxina, nitrosaminas</td><td>Alquilam ou intercalam bases do DNA</td></tr>
+      <tr><td>Biológicos</td><td>Vírus (retrovírus, HPV)</td><td>Inserção de sequências no genoma</td></tr>
+    </table></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ MUTAÇÃO CROMOSSÔMICA ═══════════════════════ -->
+<div class="page" id="page-cromossomica">
+  <div class="page-header">
+    <p class="page-tag">// genética · 1,5 pt</p>
+    <h1 class="page-title">🔴 Mutação Cromossômica</h1>
+    <div class="page-line"></div>
+    <p class="page-desc">Alterações no número ou estrutura dos cromossomos — visíveis ao microscópio óptico.</p>
+  </div>
+
+  <div class="card">
+    <h3>📊 Classificação Geral</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Categoria</th><th>Subcategoria</th><th>Descrição</th></tr>
+      <tr><td rowspan="3"><strong>Numéricas</strong></td><td>Euploidia</td><td>Múltiplos do número haploide (ex: triploidia = 3n)</td></tr>
+      <tr><td>Aneuploidia: Monossomia</td><td>2n−1 (falta um cromossomo)</td></tr>
+      <tr><td>Aneuploidia: Trissomia</td><td>2n+1 (cromossomo extra)</td></tr>
+      <tr><td rowspan="4"><strong>Estruturais</strong></td><td>Deleção</td><td>Perda de segmento cromossômico</td></tr>
+      <tr><td>Duplicação</td><td>Segmento repetido</td></tr>
+      <tr><td>Inversão</td><td>Segmento invertido (180°)</td></tr>
+      <tr><td>Translocação</td><td>Segmento vai para outro cromossomo</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>🔴 Principais Síndromes — TABELA COMPLETA</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Síndrome</th><th>Cariótipo</th><th>Alteração</th><th>Características principais</th></tr>
+      <tr><td><strong>Down</strong></td><td>47, +21</td><td>Trissomia do 21</td><td>DI leve-moderada, fácies típica, hipotonia, cardiopatia (40%), olhos amendoados, mãos largas</td></tr>
+      <tr><td><strong>Edwards</strong></td><td>47, +18</td><td>Trissomia do 18</td><td>DI grave, malformações múltiplas, punhos fechados com dedos sobrepostos, morte precoce</td></tr>
+      <tr><td><strong>Patau</strong></td><td>47, +13</td><td>Trissomia do 13</td><td>DI grave, ciclopia/holoprosencefalia, polidactilia, cardiopatia grave, mortalidade alta</td></tr>
+      <tr><td><strong>Turner</strong></td><td>45, X (45,X0)</td><td>Monossomia X</td><td>Apenas em MULHERES, baixa estatura, pescoço alado (pterígio), amenorreia, infertilidade, sem DI</td></tr>
+      <tr><td><strong>Klinefelter</strong></td><td>47, XXY</td><td>Trissomia XXY</td><td>Apenas em HOMENS, testículos pequenos, ginecomastia, infertilidade, estatura alta</td></tr>
+      <tr><td><strong>XYY</strong></td><td>47, XYY</td><td>Trissomia XYY</td><td>Apenas em HOMENS, estatura alta, fertilidade normal, DI leve possível</td></tr>
+      <tr><td><strong>XXX</strong></td><td>47, XXX</td><td>Trissomia XXX</td><td>Mulheres, geralmente normais, possível DI leve, fertilidade preservada</td></tr>
+      <tr><td><strong>Cri-du-chat</strong></td><td>46, del(5p)</td><td>Deleção 5p</td><td>Choro como miado de gato, DI grave, microcefalia</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>🔧 Mutações Estruturais — Detalhes</h3>
+    <ul>
+      <li><strong>Deleção:</strong> segmento perdido → perda de genes → geralmente grave. Ex: Síndrome Cri-du-chat (5p-)</li>
+      <li><strong>Duplicação:</strong> segmento duplicado → dosagem gênica aumentada. Pode ser menos grave que deleção</li>
+      <li><strong>Inversão Paracêntrica:</strong> inversão não envolve o centrômero → genes reposicionados</li>
+      <li><strong>Inversão Pericêntrica:</strong> inversão envolve o centrômero → pode alterar proporção dos braços p/q</li>
+      <li><strong>Translocação Recíproca:</strong> troca de segmentos entre 2 cromossomos não homólogos → portador balanceado geralmente normal</li>
+      <li><strong>Translocação Robertsoniana:</strong> fusão de dois cromossomos acrocêntricos (13,14,15,21,22) → 45 cromossomos mas diplóide funcional. Ex: Down familiar (14;21)</li>
+    </ul>
+  </div>
+
+  <div class="box danger">⚠️ <strong>Cuidado:</strong> Síndrome de Down FAMILIAR pode ocorrer por translocação Robertsoniana (não trissomia livre) — o cariótipo tem 46 cromossomos mas com material extra do 21 translocado. Risco de recorrência ALTO!</div>
+  <div class="box success">💡 <strong>Macete síndromes:</strong> DOWN = 21 (D=4ª letra = 4+... não, melhor: 21 = Down, 18 = Edwards, 13 = Patau. Turner = 45,X = Feminino sem X extra. Klinefelter = 47,XXY = Masculino com X a mais).</div>
+</div>
+
+<!-- ═══════════════════════ SISTEMA REPRODUTIVO ═══════════════════════ -->
+<div class="page" id="page-reprodutivo">
+  <div class="page-header">
+    <p class="page-tag">// embriologia · 1,5 pt</p>
+    <h1 class="page-title">⚕️ Sistema Reprodutivo</h1>
+    <div class="page-line"></div>
+    <p class="page-desc">Estruturas e funções dos sistemas reprodutores masculino e feminino — base para entender gametogênese e fertilização.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+    <div class="card">
+      <h3>♂ Sistema Reprodutor Masculino</h3>
+      <div class="tbl-wrap"><table>
+        <tr><th>Estrutura</th><th>Função</th></tr>
+        <tr><td>Testículos</td><td>Produção de espermatozoides (túbulos seminíferos) e testosterona (células de Leydig)</td></tr>
+        <tr><td>Epidídimo</td><td>Maturação e armazenamento dos espermatozoides</td></tr>
+        <tr><td>Ducto deferente</td><td>Transporte dos espermatozoides até a uretra</td></tr>
+        <tr><td>Vesículas seminais</td><td>Secreção rica em frutose (energia para espermatozoides) — 60% do sêmen</td></tr>
+        <tr><td>Próstata</td><td>Secreção alcalina que neutraliza acidez vaginal</td></tr>
+        <tr><td>Glândulas bulbouretrais</td><td>Lubrificação da uretra antes da ejaculação</td></tr>
+        <tr><td>Pênis</td><td>Órgão copulador e micção</td></tr>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>♀ Sistema Reprodutor Feminino</h3>
+      <div class="tbl-wrap"><table>
+        <tr><th>Estrutura</th><th>Função</th></tr>
+        <tr><td>Ovários</td><td>Produção de ovócitos, estrogênio e progesterona</td></tr>
+        <tr><td>Tubas uterinas (trompas)</td><td>Local da fertilização (ampola); transporte do ovócito ao útero</td></tr>
+        <tr><td>Útero</td><td>Implantação do embrião, desenvolvimento fetal, parto</td></tr>
+        <tr><td>Endométrio</td><td>Camada mucosa interna do útero; local de implantação</td></tr>
+        <tr><td>Miométrio</td><td>Camada muscular do útero; contrações no parto</td></tr>
+        <tr><td>Cérvix (colo)</td><td>Barreira entre útero e vagina; dilatação no parto</td></tr>
+        <tr><td>Vagina</td><td>Canal do parto, órgão copulador</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🌡️ Ciclo Menstrual e Hormônios</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Fase</th><th>Dias</th><th>Hormônio dominante</th><th>O que acontece</th></tr>
+      <tr><td>Menstrual</td><td>1–5</td><td>Baixo estrogênio e progesterona</td><td>Descamação do endométrio</td></tr>
+      <tr><td>Proliferativa (folicular)</td><td>6–13</td><td>Estrogênio (FSH/LH crescentes)</td><td>Crescimento folicular, espessamento do endométrio</td></tr>
+      <tr><td>Ovulação</td><td>14</td><td>Pico de LH</td><td>Liberação do ovócito secundário</td></tr>
+      <tr><td>Secretória (lútea)</td><td>15–28</td><td>Progesterona (corpo lúteo)</td><td>Preparo do endométrio para implantação</td></tr>
+    </table></div>
+    <div class="box info">A ovulação libera o <strong>ovócito secundário</strong> (parado em metáfase II) — NÃO o óvulo maduro. A meiose II só se completa se houver fertilização!</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ GAMETOGÊNESE ═══════════════════════ -->
+<div class="page" id="page-gametogenese">
+  <div class="page-header">
+    <p class="page-tag">// embriologia · 1,5 pt</p>
+    <h1 class="page-title">🔵 Gametogênese</h1>
+    <div class="page-line"></div>
+    <p class="page-desc">Formação dos gametas masculinos (espermatozoides) e femininos (ovócitos) por meiose.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+    <div class="card">
+      <h3>♂ Espermatogênese</h3>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-title">Espermatogônia (2n)</div><div class="tl-body">Células-tronco nos túbulos seminíferos. Tipo A: renovação. Tipo B: diferenciação.</div></div>
+        <div class="tl-item"><div class="tl-title">Espermatócito Primário (2n)</div><div class="tl-body">Entra em Meiose I (dura ~3 semanas). Replicação de DNA → 4n.</div></div>
+        <div class="tl-item"><div class="tl-title">Meiose I ↓</div><div class="tl-body">Divisão reducional → 2 espermatócitos secundários (n, cada um com cromátides-irmãs)</div></div>
+        <div class="tl-item"><div class="tl-title">Espermatócito Secundário (n)</div><div class="tl-body">Entra imediatamente em Meiose II (muito rápida)</div></div>
+        <div class="tl-item"><div class="tl-title">Meiose II ↓</div><div class="tl-body">Divisão equacional → 4 espermátides (n)</div></div>
+        <div class="tl-item"><div class="tl-title">Espermátides (n)</div><div class="tl-body">Células redondas, sem flagelo ainda</div></div>
+        <div class="tl-item" style="--color:var(--green)"><div class="tl-title">Espermiogênese</div><div class="tl-body">Diferenciação: condensação do núcleo, formação do acrossoma, desenvolvimento do flagelo → 4 espermatozoides funcionais</div></div>
+      </div>
+      <div class="box success"><strong>Resultado: 1 espermatogônia → 4 espermatozoides funcionais</strong></div>
+    </div>
+    <div class="card">
+      <h3>♀ Ovogênese</h3>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-title">Ovogônia (2n)</div><div class="tl-body">Proliferação fetal — máximo de ~7 milhões ao 5º mês de gestação</div></div>
+        <div class="tl-item"><div class="tl-title">Ovócito Primário (2n)</div><div class="tl-body">Inicia Meiose I na vida fetal → BLOQUEIA em PRÓFASE I. Ao nascimento: ~2 milhões de ovócitos primários</div></div>
+        <div class="tl-item"><div class="tl-title">Puberdade →</div><div class="tl-body">A cada ciclo: 1 ovócito primário retoma a Meiose I (estímulo do LH)</div></div>
+        <div class="tl-item"><div class="tl-title">Meiose I ↓</div><div class="tl-body">Divisão assimétrica → ovócito secundário (n, grande) + 1º corpúsculo polar (n, pequeno)</div></div>
+        <div class="tl-item"><div class="tl-title">Ovócito Secundário (n)</div><div class="tl-body">É ovulado! BLOQUEIA em METÁFASE II. Aguarda fertilização.</div></div>
+        <div class="tl-item"><div class="tl-title">Se fertilizado ↓</div><div class="tl-body">Conclui Meiose II → óvulo maduro (n) + 2º corpúsculo polar</div></div>
+        <div class="tl-item"><div class="tl-title">Fecundação</div><div class="tl-body">Pró-núcleo feminino (n) + pró-núcleo masculino (n) = zigoto (2n)</div></div>
+      </div>
+      <div class="box danger"><strong>Resultado: 1 ovogônia → 1 gameta funcional + corpúsculos polares</strong></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📊 Comparativo Espermatogênese vs Ovogênese</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Característica</th><th>Espermatogênese</th><th>Ovogênese</th></tr>
+      <tr><td>Local</td><td>Túbulos seminíferos (testículos)</td><td>Folículos ovarianos</td></tr>
+      <tr><td>Início</td><td>Puberdade</td><td>Vida fetal (5ª semana)</td></tr>
+      <tr><td>Duração após puberdade</td><td>Contínua (~64 dias/ciclo)</td><td>Cíclica (1/mês)</td></tr>
+      <tr><td>Gametas/processo</td><td><strong>4 espermatozoides funcionais</strong></td><td><strong>1 ovócito funcional</strong></td></tr>
+      <tr><td>Divisão citoplasmática</td><td>Simétrica</td><td>Assimétrica (ovócito grande)</td></tr>
+      <tr><td>Bloqueio meiótico</td><td>Nenhum</td><td>Prófase I (infância) + Metáfase II (ovulação)</td></tr>
+      <tr><td>Estruturas laterais</td><td>Espermátides →espermatozoides</td><td>Corpúsculos polares (degeneram)</td></tr>
+      <tr><td>Células de suporte</td><td>Células de Sertoli</td><td>Células da granulosa</td></tr>
+    </table></div>
+  </div>
+
+  <div class="box warn">⚠️ <strong>PONTO DE PROVA:</strong> O ovócito ovulado está parado em <strong>METÁFASE II</strong>, NÃO é o óvulo. A meiose só termina com a fertilização. Se não for fertilizado, degenera em ~24h.</div>
+</div>
+
+<!-- ═══════════════════════ FERTILIZAÇÃO ═══════════════════════ -->
+<div class="page" id="page-fertilizacao">
+  <div class="page-header">
+    <p class="page-tag">// embriologia · 1,5 pt</p>
+    <h1 class="page-title">✨ Fertilização</h1>
+    <div class="page-line"></div>
+    <p class="page-desc">Fusão dos gametas masculino e feminino e restabelecimento do número diploide.</p>
+  </div>
+
+  <div class="card">
+    <h3>📍 Onde e Quando</h3>
+    <ul>
+      <li><strong>Local:</strong> Ampola da tuba uterina (1/3 externo — porção mais larga)</li>
+      <li><strong>Janela fértil:</strong> ovócito viável por ~24h após ovulação; espermatozoides viáveis por ~3–5 dias</li>
+      <li><strong>Tempo de capacitação:</strong> espermatozoides precisam de 6–8 horas no trato genital feminino</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>⚡ Etapas da Fertilização (em ordem)</h3>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-title">1. Capacitação dos Espermatozoides</div><div class="tl-body">No trato feminino: remoção do revestimento glicoproteico, aumento da motilidade, hiperativação. Prepara para reação acrossômica.</div></div>
+      <div class="tl-item"><div class="tl-title">2. Penetração da Corona Radiata</div><div class="tl-body">Espermatozoides dispersam as células da corona radiata usando hialuronidase do acrossoma e movimentos da cauda.</div></div>
+      <div class="tl-item"><div class="tl-title">3. Penetração da Zona Pelúcida</div><div class="tl-body">Ligação à ZP3 (glicoproteína) desencadeia a <strong>reação acrossômica</strong>: enzimas do acrossoma (acrosina, hialuronidase) digerem a zona pelúcida.</div></div>
+      <div class="tl-item"><div class="tl-title">4. Fusão das Membranas</div><div class="tl-body">Membrana do espermatozoide funde-se com membrana do ovócito → cabeça e cauda entram no citoplasma.</div></div>
+      <div class="tl-item"><div class="tl-title">5. Reação Cortical (bloco à poliespermia)</div><div class="tl-body">Grânulos corticais do ovócito são liberados → modificam a zona pelúcida → impermeável a outros espermatozoides. PREVINE POLIESPERMIA.</div></div>
+      <div class="tl-item"><div class="tl-title">6. Conclusão da Meiose II</div><div class="tl-body">Estímulo da fertilização completa a Meiose II do ovócito secundário → óvulo maduro (n) + 2º corpúsculo polar</div></div>
+      <div class="tl-item"><div class="tl-title">7. Formação dos Pró-núcleos</div><div class="tl-body">Pró-núcleo feminino (ovócito) + Pró-núcleo masculino (cabeça do espermatozoide se descondensa) — ambos com n cromossomos</div></div>
+      <div class="tl-item"><div class="tl-title">8. Singamia → ZIGOTO (2n)</div><div class="tl-body">Os pró-núcleos se fundem → zigoto diplóide 46 cromossomos. PRIMEIRA DIVISÃO MITÓTICA se inicia ~30h após.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🎯 Resultados da Fertilização</h3>
+    <ul>
+      <li>Restabelece o número <strong>diploide (2n = 46 cromossomos)</strong></li>
+      <li>Determina o <strong>sexo cromossômico</strong> do embrião (X ou Y do espermatozoide)</li>
+      <li>Inicia a clivagem (primeiras divisões mitóticas)</li>
+      <li>Completa a meiose II do ovócito</li>
+    </ul>
+    <div class="box info">♂ determina o sexo: espermatozoide X → embrião XX (feminino) | espermatozoide Y → embrião XY (masculino)</div>
+  </div>
+
+  <div class="box danger">⚠️ <strong>Gravidez ectópica:</strong> implantação FORA do útero, geralmente na tuba uterina. Causa: migração do embrião bloqueada (ex: aderências, DIP). Emergência médica!</div>
+</div>
+
+<!-- ═══════════════════════ SEMANA 1 ═══════════════════════ -->
+<div class="page" id="page-semana1">
+  <div class="page-header">
+    <p class="page-tag">// embriologia · 1,5 pt</p>
+    <h1 class="page-title">1️⃣ Primeira Semana de Desenvolvimento</h1>
+    <div class="page-line"></div>
+    <p class="page-desc">Do zigoto à implantação inicial — do dia 1 ao dia 7.</p>
+  </div>
+
+  <div class="card">
+    <h3>📅 Cronologia Dia a Dia</h3>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-title">Dia 1 — Zigoto</div><div class="tl-body">Fertilização → zigoto (2n). Início das divisões de clivagem (~30h após fertilização). Ainda na ampola da tuba.</div></div>
+      <div class="tl-item"><div class="tl-title">Dia 2 — 2 células</div><div class="tl-body">1ª clivagem concluída. Células chamadas <strong>blastômeros</strong>. Volume total = volume do zigoto (células ficam menores a cada divisão).</div></div>
+      <div class="tl-item"><div class="tl-title">Dia 3 — 4-8 células</div><div class="tl-body">Clivagens continuam. No estágio de 8 células ocorre a <strong>compactação</strong>: blastômeros se aproximam maximizando contato célula-célula (junções aderentes).</div></div>
+      <div class="tl-item"><div class="tl-title">Dia 3-4 — Mórula</div><div class="tl-body">~16 blastômeros. Massa sólida de células (parece amora → "mórula"). Chega ao útero. Ainda dentro da zona pelúcida.</div></div>
+      <div class="tl-item"><div class="tl-title">Dia 4-5 — Blastocisto inicial</div><div class="tl-body">Fluido entra → forma a <strong>blastocele</strong> (cavidade). Diferenciação celular: <strong>embrioblasto</strong> (polo embrionário) e <strong>trofoblasto</strong> (polo abembrionário). Zona pelúcida começa a se degenerar.</div></div>
+      <div class="tl-item"><div class="tl-title">Dia 5-6 — Eclosão (hatching)</div><div class="tl-body">Zona pelúcida se rompe. Blastocisto eclode → aumenta de tamanho. Pronto para implantação.</div></div>
+      <div class="tl-item"><div class="tl-title">Dia 6-7 — Implantação</div><div class="tl-body">Blastocisto adere ao endométrio uterino (parede posterior geralmente). Trofoblasto começa a invadir. Término da 1ª semana.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔑 Estruturas do Blastocisto</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Estrutura</th><th>Localização</th><th>Origem</th></tr>
+      <tr><td><strong>Embrioblasto</strong> (massa celular interna)</td><td>Polo interno, dentro da blastocele</td><td>Dará origem ao <strong>embrião propriamente dito</strong> + âmnio + saco vitelínico</td></tr>
+      <tr><td><strong>Trofoblasto</strong></td><td>Camada externa</td><td>Dará origem à <strong>placenta</strong> e membranas extraembrionárias</td></tr>
+      <tr><td><strong>Blastocele</strong></td><td>Cavidade interna</td><td>Fluido acumulado — permite diferenciação</td></tr>
+    </table></div>
+    <div class="box success">💡 <strong>Macete:</strong> EMBRIOblasto = EMBRIÃO. TROFOblasto = TROFO (trofismo/nutrição) = PLACENTA.</div>
+  </div>
+
+  <div class="card">
+    <h3>📌 Clivagem — Características Especiais</h3>
+    <ul>
+      <li>Divisões mitóticas <strong>sem crescimento celular</strong> entre divisões</li>
+      <li>Células ficam cada vez <strong>menores</strong> (volume total mantido)</li>
+      <li>Ocorre dentro da <strong>zona pelúcida</strong> (evita implantação prematura na tuba)</li>
+      <li>Embrião é transportado pela tuba ao longo da 1ª semana</li>
+      <li>Velocidade: ~1 divisão a cada 12–24 horas</li>
+    </ul>
+  </div>
+
+  <div class="box warn">⚠️ <strong>Gêmeos monozigóticos:</strong> se o embrioblasto se divide antes do dia 8 → dois embriões (monochoriônicos-diamnióticos ou monoamnióticos, dependendo do dia da divisão). Divisão após dia 13 → gêmeos siameses.</div>
+</div>
+
+<!-- ═══════════════════════ SEMANA 2 ═══════════════════════ -->
+<div class="page" id="page-semana2">
+  <div class="page-header">
+    <p class="page-tag">// embriologia · 1,5 pt</p>
+    <h1 class="page-title">2️⃣ Segunda Semana de Desenvolvimento</h1>
+    <div class="page-line"></div>
+    <p class="page-desc">"Semana dos Dois's" — disco bilaminar, dois trofoblastos, duas cavidades. Dias 8 a 14.</p>
+  </div>
+
+  <div class="card">
+    <h3>🏷️ A "Semana dos 2's" — Macete Oficial</h3>
+    <div class="box info">
+      <strong>2</strong> camadas do trofoblasto (citotrofoblasto + sinciciotrofoblasto)<br>
+      <strong>2</strong> camadas do embrioblasto (epiblasto + hipoblasto) = disco bilaminar<br>
+      <strong>2</strong> cavidades (âmnio + saco vitelínico)<br>
+      <strong>2</strong>ª semana de desenvolvimento
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔀 Diferenciação do Trofoblasto (dias 8-10)</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Camada</th><th>Localização</th><th>Características</th><th>Função</th></tr>
+      <tr><td><strong>Citotrofoblasto</strong></td><td>Interna (contato com embrioblasto)</td><td>Células individuais com limites celulares distintos. Prolifera (mitoses ativas).</td><td>Zona de proliferação — células migram para o sincício</td></tr>
+      <tr><td><strong>Sinciciotrofoblasto</strong></td><td>Externa (contato com endométrio)</td><td>Massa multinucleada SEM divisões celulares — fusão de células. Invasivo.</td><td>Invasão do endométrio, produção de β-hCG, nutrição do embrião</td></tr>
+    </table></div>
+    <div class="box warn">⚠️ O sinciciotrofoblasto produz <strong>β-hCG</strong> — hormônio detectado no teste de gravidez! Detectável ~8–10 dias após fertilização.</div>
+  </div>
+
+  <div class="card">
+    <h3>🧫 Diferenciação do Embrioblasto — Disco Bilaminar (dias 8-9)</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Camada</th><th>Posição</th><th>Origem</th></tr>
+      <tr><td><strong>Epiblasto</strong></td><td>Superior (dorsal) — próximo à cavidade amniótica</td><td>Dará origem ao <strong>embrião inteiro</strong> (3 folhetos germinativos na 3ª semana) + âmnio</td></tr>
+      <tr><td><strong>Hipoblasto</strong></td><td>Inferior (ventral) — próximo à blastocele</td><td>Dará origem ao <strong>saco vitelínico</strong> (endoderma extraembrionário)</td></tr>
+    </table></div>
+    <div class="box success">💡 <strong>Macete:</strong> EPI = epi (cima) = superior. HIPO = hipo (baixo) = inferior. Epiblasto forma o EMBRIÃO (mais importante).</div>
+  </div>
+
+  <div class="card">
+    <h3>🏗️ Estruturas Formadas na 2ª Semana</h3>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-title">Cavidade Amniótica</div><div class="tl-body">Aparece entre o epiblasto e o citotrofoblasto (dia 8). Revestida por amnioblastos (derivados do epiblasto). Futuramente protegerá o embrião (fluido amniótico).</div></div>
+      <div class="tl-item"><div class="tl-title">Saco Vitelínico Primário</div><div class="tl-body">Cavidade formada pelo hipoblasto (dia 9-10). Depois é substituído pelo saco vitelínico secundário (definitivo).</div></div>
+      <div class="tl-item"><div class="tl-title">Mesoderma Extraembrionário</div><div class="tl-body">Células do epiblasto migram e preenchem espaço entre trofoblasto e âmnio/saco vitelínico. Depois forma o celoma extraembrionário (cavidade coriônica).</div></div>
+      <div class="tl-item"><div class="tl-title">Lacunas / Vilosidades Coriônicas</div><div class="tl-body">Sinciciotrofoblasto forma lacunas (dia 9) → preenchidas por sangue materno (vasos erodidos) → início da circulação uteroplacentária.</div></div>
+      <div class="tl-item"><div class="tl-title">Reação Decidual (dia 10-12)</div><div class="tl-body">Células do estroma endometrial aumentam de tamanho, acumulam glicogênio e lipídios → decidualização. Nutre o embrião antes da placenta funcional.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📋 Resumo — Final da 2ª Semana (dia 14)</h3>
+    <ul>
+      <li>Embrião completamente implantado no endométrio</li>
+      <li>Disco embrionário bilaminar estabelecido (epiblasto + hipoblasto)</li>
+      <li>Duas cavidades: amniótica (dorsal) e saco vitelínico (ventral)</li>
+      <li>Trofoblasto diferenciado em citotrofoblasto + sinciciotrofoblasto</li>
+      <li>β-hCG produzida → mantém corpo lúteo → progesterona → mantém gravidez</li>
+      <li>Próxima etapa: 3ª semana — gastrulação e formação do disco trilaminar</li>
+    </ul>
+    <div class="box danger">⚠️ <strong>Gravidez bioquímica/subclínica:</strong> implantação ocorre mas embrião não sobrevive. Mulher pode ter atraso menstrual sem saber que estava grávida — β-hCG sobe e cai rapidamente.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ EXERCÍCIOS ═══════════════════════ -->
+<div class="page" id="page-exercicios">
+  <div class="page-header">
+    <p class="page-tag">// prática</p>
+    <h1 class="page-title">📝 Exercícios</h1>
+    <div class="page-line"></div>
+    <p class="page-desc">Clique em uma alternativa para ver se acertou. A explicação aparece automaticamente.</p>
+  </div>
+
+  <div id="quiz-container"></div>
+  <div style="margin-top:1.5rem;display:flex;gap:.75rem;align-items:center">
+    <button class="btn btn-primary" onclick="resetQuiz()">🔄 Reiniciar exercícios</button>
+    <span id="score-txt" style="font-size:.88rem;color:var(--muted)"></span>
+  </div>
+</div>
+
+<!-- ═══════════════════════ FLASHCARDS ═══════════════════════ -->
+<div class="page" id="page-flashcards">
+  <div class="page-header">
+    <p class="page-tag">// memorização</p>
+    <h1 class="page-title">🃏 Flashcards</h1>
+    <div class="page-line"></div>
+    <p class="page-desc">Clique no card para revelar a resposta. Ideal para revisar na véspera da prova.</p>
+  </div>
+  <div class="box info">💡 Clique em cada card para virar e ver a definição.</div>
+  <div id="fc-container"></div>
+</div>
+
+<!-- ═══════════════════════ RESUMÃO FINAL ═══════════════════════ -->
+<div class="page" id="page-resumao">
+  <div class="page-header">
+    <p class="page-tag">// véspera de prova</p>
+    <h1 class="page-title">⚡ Resumão Final</h1>
+    <div class="page-line"></div>
+    <p class="page-desc">Os pontos mais cobrados em prova — leia isso no dia 06/05.</p>
+  </div>
+
+  <div class="box danger" style="margin-bottom:1.5rem">📅 Leia este resumão no dia <strong>06/05 (véspera)</strong> para fixar os pontos-chave.</div>
+
+  <div class="card" style="border-left:3px solid var(--accent)">
+    <h3>🧬 GENÉTICA — Top 10 Pontos</h3>
+    <ol style="padding-left:1.25rem">
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">1ª Lei:</strong> segregação dos alelos na formação dos gametas → proporção 3:1 em F2</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">2ª Lei:</strong> segregação independente (genes em cromossomos diferentes) → 9:3:3:1</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Dominância incompleta:</strong> fenótipo intermediário → 1:2:1 fenotípico E genotípico</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Codominância:</strong> dois fenótipos expressos juntos (ex: tipo AB = antígeno A + B)</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Ligada ao X recessiva:</strong> homens afetados mais que mulheres; pai afetado passa X para TODAS as filhas</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Dogma central:</strong> DNA → (transcrição) → RNA → (tradução) → Proteína</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Mutação silenciosa:</strong> muda a base, MAS não muda o aminoácido (código degenerado)</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Nonsense:</strong> cria códon de PARADA → proteína truncada</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Frameshift:</strong> inserção/deleção não múltipla de 3 → muda TUDO que vem depois</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Down = 47,+21; Turner = 45,X (mulher); Klinefelter = 47,XXY (homem)</strong></li>
+    </ol>
+  </div>
+
+  <div class="card" style="border-left:3px solid var(--teal)">
+    <h3>🔬 EMBRIOLOGIA — Top 10 Pontos</h3>
+    <ol style="padding-left:1.25rem">
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Ovócito ovulado:</strong> em METÁFASE II (NÃO é óvulo). Meiose II só termina com fertilização.</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Espermatogênese:</strong> 1 célula → 4 espermatozoides funcionais</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Ovogênese:</strong> 1 célula → 1 ovócito funcional + corpúsculos polares</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Fertilização:</strong> na AMPOLA da tuba uterina</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Reação acrossômica:</strong> enzimas perfuram zona pelúcida</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Reação cortical:</strong> impede poliespermia após entrada do 1º espermatozoide</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Blastocisto:</strong> embrioblasto (→ embrião) + trofoblasto (→ placenta) + blastocele</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">2ª semana:</strong> epiblasto + hipoblasto = disco bilaminar. Epiblasto = embrião. Hipoblasto = saco vitelínico.</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">Trofoblasto:</strong> citotrofoblasto (interno, prolifera) + sinciciotrofoblasto (externo, invade, produz β-hCG)</li>
+      <li style="margin-bottom:.5rem;color:var(--sub)"><strong style="color:var(--text)">"Semana dos 2's":</strong> 2 camadas trofoblasto, 2 camadas embrioblasto, 2 cavidades</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>🎯 O que mais cai em prova</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Tema</th><th>Questão típica</th></tr>
+      <tr><td>Proporções de Mendel</td><td>"Qual proporção esperada no cruzamento Aa × Aa?" → 3:1</td></tr>
+      <tr><td>Ligada ao X</td><td>"Daltonismo: pai daltônico, mãe normal. Qual chance do filho ser daltônico?" → 0% (filhos recebem Y do pai)</td></tr>
+      <tr><td>Mutação</td><td>"Qual mutação trunca a proteína?" → Nonsense (códon de parada)</td></tr>
+      <tr><td>Síndromes</td><td>"47,XXY é a síndrome de...?" → Klinefelter</td></tr>
+      <tr><td>Gametogênese</td><td>"Em que fase o ovócito é ovulado?" → Metáfase II</td></tr>
+      <tr><td>Fertilização</td><td>"Onde ocorre a fertilização?" → Ampola da tuba uterina</td></tr>
+      <tr><td>Blastocisto</td><td>"Qual estrutura origina a placenta?" → Trofoblasto</td></tr>
+      <tr><td>2ª semana</td><td>"Qual camada do disco bilaminar origina o embrião?" → Epiblasto</td></tr>
+    </table></div>
+  </div>
+
+  <div class="box success" style="font-size:.95rem;padding:1.25rem">
+    <strong>🍀 Boa prova, Barbara!</strong><br>
+    07/05 às 19h10 · Professora Denise · 3,0 pontos<br>
+    <span style="opacity:.8">Você estudou tudo — vai bem!</span>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ── NAVIGATION ──
+function go(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── COUNTDOWN ──
+function tick() {
+  const target = new Date('2026-05-07T19:10:00');
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) { document.getElementById('countdown').textContent = '🎉 Hoje!'; return; }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  document.getElementById('countdown').textContent = d + 'd ' + h + 'h ' + m + 'm';
+}
+tick(); setInterval(tick, 60000);
+
+// ── PROGRESS ──
+function updateProgress() {
+  const boxes = document.querySelectorAll('#checklist input');
+  const checked = [...boxes].filter(b => b.checked).length;
+  const pct = Math.round(checked / boxes.length * 100);
+  document.getElementById('pct').textContent = pct + '%';
+  document.getElementById('pfill').style.width = pct + '%';
+  boxes.forEach(b => {
+    b.closest('li').classList.toggle('done', b.checked);
+  });
+  localStorage.setItem('checks', [...boxes].map(b => b.checked ? '1' : '0').join(''));
+}
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('checks') || '';
+  document.querySelectorAll('#checklist input').forEach((b, i) => {
+    if (saved[i] === '1') { b.checked = true; b.closest('li').classList.add('done'); }
+  });
+  updateProgress();
+});
+
+// ── QUIZ DATA ──
+const QUIZ = [
+  {
+    q: "Um casal de ervilhas com genótipo Aa × Aa é cruzado. Qual a proporção fenotípica esperada na descendência?",
+    opts: ["1 : 1", "1 : 2 : 1", "3 : 1", "9 : 3 : 3 : 1"],
+    ans: 2,
+    cat: "Genética Mendeliana",
+    exp: "Cruzamento monoíbrido Aa × Aa produz 1 AA : 2 Aa : 1 aa genotipicamente, mas como AA e Aa têm o mesmo fenótipo (dominante), a proporção FENOTÍPICA é 3 dominante : 1 recessivo."
+  },
+  {
+    q: "No cruzamento entre plantas de flor vermelha (VV) e branca (vv) de Mirabilis jalapa, todos os filhos F1 são rosas (Vv). Isso exemplifica:",
+    opts: ["Codominância", "Dominância incompleta", "Epístasia", "Herança ligada ao sexo"],
+    ans: 1,
+    cat: "Padrões de Herança",
+    exp: "Na dominância incompleta, o heterozigoto Vv apresenta fenótipo INTERMEDIÁRIO (rosa) entre os homozigotos. Diferente da codominância onde os dois fenótipos aparecem simultaneamente no mesmo indivíduo."
+  },
+  {
+    q: "Uma mulher com sangue tipo A (genótipo I^A i) e um homem com sangue tipo B (genótipo I^B i) têm filhos. Qual das alternativas indica um tipo sanguíneo IMPOSSÍVEL na prole?",
+    opts: ["Tipo A", "Tipo B", "Tipo AB", "Tipo O"],
+    ans: -1, // todos são possíveis — questão pegadinha
+    ans: 4,
+    cat: "Padrões de Herança",
+    exp: "Os gametas possíveis: mãe dá I^A ou i; pai dá I^B ou i. Combinações: I^A I^B (AB), I^A i (A), I^B i (B), ii (O). Portanto TODOS os tipos são possíveis! Nenhuma alternativa seria 'impossível' — mas se uma das opções fosse o 'tipo AB' como IMPOSSÍVEL, estaria ERRADA."
+  },
+  {
+    q: "Um homem daltônico (X^a Y) casa com uma mulher normal não portadora (X^A X^A). Qual a probabilidade dos filhos homens serem daltônicos?",
+    opts: ["0%", "25%", "50%", "100%"],
+    ans: 0,
+    cat: "Herança Ligada ao X",
+    exp: "Os filhos homens herdam o cromossomo Y do pai e X^A da mãe. Portanto todos os filhos homens serão X^A Y (normais). O pai daltônico passa seu X^a APENAS para as FILHAS (que serão X^A X^a = portadoras saudáveis). Probabilidade de filhos daltônicos = 0%."
+  },
+  {
+    q: "Qual tipo de mutação puntual resulta em uma proteína TRUNCADA (incompleta)?",
+    opts: ["Mutação silenciosa", "Mutação missense (sentido trocado)", "Mutação nonsense (sem sentido)", "Mutação frameshift por inserção de 3 bases"],
+    ans: 2,
+    cat: "Genética Molecular",
+    exp: "A mutação NONSENSE transforma um códon que codifica aminoácido em um CÓDON DE PARADA (UAA, UAG ou UGA). Isso interrompe prematuramente a tradução → proteína truncada e geralmente não funcional."
+  },
+  {
+    q: "Uma inserção de 2 bases em um gene causa:",
+    opts: ["Mutação silenciosa, sem alteração proteica", "Alteração do quadro de leitura (frameshift) de todos os códons após a mutação", "Substituição de apenas um aminoácido", "Criação de um códon de parada"],
+    ans: 1,
+    cat: "Genética Molecular",
+    exp: "Inserção (ou deleção) de bases em número NÃO múltiplo de 3 altera o quadro de leitura de toda a sequência após o ponto da mutação. Como 2 não é múltiplo de 3, todos os códons seguintes são lidos de forma errada → proteína completamente diferente a partir desse ponto."
+  },
+  {
+    q: "A Síndrome de Turner é caracterizada pelo cariótipo:",
+    opts: ["47, XXY", "47, +21", "45, X", "47, XYY"],
+    ans: 2,
+    cat: "Mutação Cromossômica",
+    exp: "Turner = 45,X (monossomia do X). Afeta exclusivamente mulheres. Características: baixa estatura, pescoço alado (pterígio coli), amenorreia primária, infertilidade, sem deficiência intelectual (ou leve). Klinefelter = 47,XXY. Down = 47,+21."
+  },
+  {
+    q: "A translocação Robertsoniana envolvendo os cromossomos 14 e 21 pode causar Síndrome de Down familiar. Nesse caso, o indivíduo afetado tem quantos cromossomos?",
+    opts: ["47 cromossomos (trissomia livre)", "46 cromossomos (com material extra do 21 no cromossomo 14)", "45 cromossomos", "48 cromossomos"],
+    ans: 1,
+    cat: "Mutação Cromossômica",
+    exp: "Na Síndrome de Down por translocação robertsoniana, o material do cromossomo 21 está fundido ao cromossomo 14. O indivíduo tem 46 cromossomos no total, mas o cromossomo 14 carrega material extra do 21. O risco de recorrência familiar é muito maior que na trissomia livre!"
+  },
+  {
+    q: "Durante a ovogênese, em que fase da meiose o ovócito é liberado na ovulação?",
+    opts: ["Prófase I", "Metáfase I", "Anáfase I", "Metáfase II"],
+    ans: 3,
+    cat: "Gametogênese",
+    exp: "O ovócito primário fica bloqueado em PRÓFASE I durante toda a infância. Com o pico de LH na puberdade/ciclo, retoma e conclui a Meiose I → ovócito secundário, que bloqueia em METÁFASE II. É nesse estado (metáfase II) que o ovócito é OVULADO. Meiose II só termina se houver fertilização."
+  },
+  {
+    q: "Qual das seguintes afirmações sobre espermatogênese está CORRETA?",
+    opts: [
+      "Produz 1 espermatozoide por espermatogônia",
+      "O processo se inicia ainda na vida fetal",
+      "Produz 4 espermatozoides funcionais por espermatogônia",
+      "Ocorre nos ovários"
+    ],
+    ans: 2,
+    cat: "Gametogênese",
+    exp: "A espermatogênese produz 4 espermatozoides funcionais por célula (pois as divisões são simétricas). Ocorre nos túbulos seminíferos dos testículos (não ovários). Inicia na PUBERDADE (não na vida fetal, diferente da ovogênese)."
+  },
+  {
+    q: "Onde ocorre a fertilização normalmente?",
+    opts: ["Na cavidade uterina", "No colo do útero (cérvix)", "Na ampola da tuba uterina", "No ovário"],
+    ans: 2,
+    cat: "Fertilização",
+    exp: "A fertilização ocorre na AMPOLA da tuba uterina (1/3 externo, porção mais larga). O ovócito é captado pelo infundíbulo (fímbrias) após a ovulação e o espermatozoide sobe pelo trato genital feminino. Implantação ocorre no ÚTERO (endométrio), mas fertilização é na tuba."
+  },
+  {
+    q: "Qual é a função principal da reação cortical durante a fertilização?",
+    opts: [
+      "Ajudar o espermatozoide a penetrar a zona pelúcida",
+      "Completar a meiose II do ovócito",
+      "Impedir a entrada de mais de um espermatozoide (poliespermia)",
+      "Iniciar a clivagem do zigoto"
+    ],
+    ans: 2,
+    cat: "Fertilização",
+    exp: "A REAÇÃO CORTICAL ocorre logo após a fusão das membranas: grânulos corticais do ovócito se fundem com a membrana plasmática e liberam seu conteúdo no espaço perivitelínico → modificam a zona pelúcida → impermeável a outros espermatozoides. Isso é o BLOCO À POLIESPERMIA (poliespermia causaria embrião poliplóide, inviável)."
+  },
+  {
+    q: "O blastocisto é composto por três elementos principais. Qual estrutura dará origem à placenta?",
+    opts: ["Embrioblasto (massa celular interna)", "Trofoblasto", "Blastocele", "Zona pelúcida"],
+    ans: 1,
+    cat: "1ª Semana",
+    exp: "TROFOBLASTO → placenta e membranas extraembrionárias. EMBRIOBLASTO → embrião propriamente dito (+ âmnio, saco vitelínico, alantoide). BLASTOCELE é apenas a cavidade. Macete: TROFOblasto = TROFismo = nutre o embrião via placenta."
+  },
+  {
+    q: "O disco embrionário bilaminar da 2ª semana é formado por quais camadas?",
+    opts: [
+      "Ectoblasto e endoblasto",
+      "Epiblasto e hipoblasto",
+      "Citotrofoblasto e sinciciotrofoblasto",
+      "Mesoderma e endoderma"
+    ],
+    ans: 1,
+    cat: "2ª Semana",
+    exp: "O disco bilaminar tem EPIBLASTO (superior/dorsal → futuramente dará origem ao embrião inteiro por gastrulação) e HIPOBLASTO (inferior/ventral → forma o saco vitelínico). O trofoblasto se diferencia em citotrofoblasto e sinciciotrofoblasto, mas esses formam a camada externa ao embrião."
+  },
+  {
+    q: "O sinciciotrofoblasto é importante clinicamente porque produz:",
+    opts: ["Progesterona", "Estrogênio", "β-hCG (gonadotrofina coriônica humana)", "FSH"],
+    ans: 2,
+    cat: "2ª Semana",
+    exp: "O SINCICIOTROFOBLASTO produz β-hCG a partir do dia 8-10 após fertilização. Esse hormônio mantém o corpo lúteo funcionando → corpo lúteo continua produzindo progesterona → endométrio é mantido → gravidez não é interrompida. É o β-hCG que é DETECTADO NO TESTE DE GRAVIDEZ!"
+  }
+];
+
+let answered = new Array(QUIZ.length).fill(false);
+let correct = 0;
+
+function buildQuiz() {
+  const c = document.getElementById('quiz-container');
+  c.innerHTML = QUIZ.map((q, i) => `
+    <div class="quiz-card" id="qcard-${i}">
+      <div class="q-num"><span class="badge purple">${q.cat}</span> &nbsp; Questão ${i+1} de ${QUIZ.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">
+        ${q.opts.map((o, j) => `
+          <button class="opt" onclick="answer(${i},${j})" id="opt-${i}-${j}">
+            <span class="opt-letter">${String.fromCharCode(65+j)})</span> ${o}
+          </button>`).join('')}
+      </div>
+      <div class="q-explain" id="exp-${i}">${q.exp}</div>
+    </div>`).join('');
+}
+
+function answer(qi, oi) {
+  if (answered[qi]) return;
+  answered[qi] = true;
+  const q = QUIZ[qi];
+  const opts = document.querySelectorAll(`#qcard-${qi} .opt`);
+  opts.forEach((o, j) => {
+    o.disabled = true;
+    if (j === q.ans) o.classList.add('correct');
+    else if (j === oi && oi !== q.ans) o.classList.add('wrong');
+  });
+  if (oi === q.ans) correct++;
+  document.getElementById(`exp-${qi}`).style.display = 'block';
+  const done = answered.filter(Boolean).length;
+  document.getElementById('score-txt').textContent = `${done}/${QUIZ.length} respondidas · ${correct} corretas`;
+}
+
+function resetQuiz() {
+  answered = new Array(QUIZ.length).fill(false);
+  correct = 0;
+  document.getElementById('score-txt').textContent = '';
+  buildQuiz();
+}
+
+// ── FLASHCARDS ──
+const CARDS = [
+  ["1ª Lei de Mendel", "Lei da Segregação: os alelos se separam na formação dos gametas. Cada gameta recebe apenas um alelo de cada par."],
+  ["2ª Lei de Mendel", "Lei da Segregação Independente: genes em cromossomos diferentes se segregam independentemente → proporção 9:3:3:1 no diíbrido."],
+  ["Dominância Incompleta", "Heterozigoto com fenótipo intermediário. Ex: Mirabilis jalapa vermelho × branco = rosa. Proporção F2: 1:2:1 fenotípica."],
+  ["Codominância", "Ambos os alelos expressos simultaneamente. Ex: sangue tipo AB expressa antígenos A e B. Diferente da dominância incompleta (sem mistura)."],
+  ["Daltonismo/Hemofilia", "Herança recessiva ligada ao X. Homens (X^a Y) são afetados com maior frequência. Mulheres portadoras (X^A X^a) são saudáveis mas transmitem."],
+  ["Mutação Silenciosa", "Troca de base do DNA que NÃO muda o aminoácido (código genético é degenerado). Sem efeito fenotípico."],
+  ["Mutação Missense", "Troca de base → aminoácido diferente. Pode ou não afetar a função proteica. Ex: anemia falciforme (Glu→Val na hemoglobina)."],
+  ["Mutação Nonsense", "Troca de base → CÓDON DE PARADA prematuro → proteína truncada, geralmente não funcional."],
+  ["Mutação Frameshift", "Inserção ou deleção de bases NÃO múltiplas de 3 → muda o quadro de leitura de toda a sequência posterior. Proteína completamente alterada."],
+  ["Síndrome de Down", "47, +21 (trissomia do cromossomo 21). DI leve-moderada, hipotonia, fácies típica, cardiopatia. Pode ser por trissomia livre ou translocação robertsoniana."],
+  ["Síndrome de Turner", "45, X. EXCLUSIVA DE MULHERES. Baixa estatura, pescoço alado, amenorreia, infertilidade. SEM deficiência intelectual (ou leve)."],
+  ["Síndrome de Klinefelter", "47, XXY. EXCLUSIVA DE HOMENS. Testículos pequenos, ginecomastia, infertilidade, estatura alta."],
+  ["Espermatogênese", "1 espermatogônia → 4 espermatozoides funcionais. Ocorre nos túbulos seminíferos. Inicia na puberdade. Processo contínuo."],
+  ["Ovogênese", "1 ovogônia → 1 ovócito funcional + corpúsculos polares (degeneram). Inicia na vida fetal. Bloqueada em prófase I até a puberdade e em metáfase II até a fertilização."],
+  ["Ovócito na Ovulação", "O ovócito é liberado parado em METÁFASE II (NÃO é óvulo maduro). A meiose II só se completa se houver fertilização. Sem fertilização → degenera em ~24h."],
+  ["Local da Fertilização", "AMPOLA da tuba uterina (1/3 externo). O ovócito é captado pelas fímbrias e o espermatozoide sobe pelo trato feminino."],
+  ["Reação Acrossômica", "Enzimas do acrossoma (acrosina, hialuronidase) liberam-se ao contato com a zona pelúcida → digerem a ZP → permitem a penetração do espermatozoide."],
+  ["Reação Cortical", "Grânulos corticais do ovócito são exocitados após a fertilização → modificam a zona pelúcida → impermeável a outros espermatozoides. BLOCO À POLIESPERMIA."],
+  ["Blastocisto — Componentes", "Embrioblasto (massa celular interna) → embrião. Trofoblasto (camada externa) → placenta. Blastocele → cavidade interna."],
+  ["Semana dos 2's", "2ª semana: 2 camadas do trofoblasto (citotrofoblasto + sinciciotrofoblasto), 2 camadas do embrioblasto (epiblasto + hipoblasto = disco bilaminar), 2 cavidades (amniótica + saco vitelínico)."],
+  ["Epiblasto vs Hipoblasto", "EPIBLASTO (superior/dorsal) → embrião inteiro (3 folhetos na 3ª semana). HIPOBLASTO (inferior/ventral) → saco vitelínico. Macete: EPI = em cima = embrião."],
+  ["Sinciciotrofoblasto", "Camada externa do trofoblasto. Multinucleada, sem divisões celulares distintas. Invade o endométrio. Produz β-hCG → mantém corpo lúteo → mantém a gravidez."],
+  ["β-hCG", "Gonadotrofina coriônica humana. Produzida pelo sinciciotrofoblasto a partir do dia 8-10. Detectada no teste de gravidez. Mantém o corpo lúteo e a produção de progesterona."],
+  ["Clivagem", "Divisões mitóticas do zigoto SEM crescimento celular. Células (blastômeros) ficam cada vez menores. Ocorre dentro da zona pelúcida. Mórula = ~16 células."],
+  ["Dogma Central", "DNA →(replicação)→ DNA | DNA →(transcrição)→ RNA | RNA →(tradução)→ Proteína. Transcrição no núcleo. Tradução nos ribossomos."],
+];
+
+function buildFlashcards() {
+  const groups = [
+    { title: "🧬 Genética Mendeliana & Padrões", range: [0,5] },
+    { title: "🧪 Genética Molecular & Mutação", range: [5,9] },
+    { title: "🔴 Síndromes Cromossômicas", range: [9,12] },
+    { title: "🔵 Gametogênese & Fertilização", range: [12,18] },
+    { title: "🏗️ Desenvolvimento Embrionário", range: [18,25] },
+  ];
+  const c = document.getElementById('fc-container');
+  c.innerHTML = groups.map(g => {
+    const cards = CARDS.slice(g.range[0], g.range[1]);
+    return `<h3 style="margin:1.5rem 0 .75rem;font-size:1rem;color:var(--accent2)">${g.title}</h3>
+    <div class="fc-grid">${cards.map(card => `
+      <div class="fc" onclick="this.classList.toggle('flipped')">
+        <div class="front">${card[0]}</div>
+        <div class="back">${card[1]}</div>
+      </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+// ── INIT ──
+buildQuiz();
+buildFlashcards();
+</script>
+</body>
+</html>
